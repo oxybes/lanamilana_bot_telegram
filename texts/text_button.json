@@ -1,0 +1,15 @@
+{
+    "English": 
+    {
+        "start_menu": [  {"get_subscribe" : "❤️Subscribe"}, {"profile" :"👤Profile"}],
+        "profile_menu" : [{ "up_balance" : "💰Up balance" }, { "language" : "🇺🇸Language" }, {"main_menu" : "In main menu"}],
+        "main_menu_back" : "🔙Back"
+    }, 
+    "Russian": 
+    {
+        "start_menu": [ { "get_subscribe" : "❤️Оформить подписку" }, { "profile" : "👤Профиль" } ],
+        "profile_menu" : [{ "up_balance" : "💰Пополнить баланс" }, { "language" : "🇷🇺Язык" }, {"main_menu" : "В главное меню"}],
+        "main_menu_back" : "🔙Назад"
+    }
+    
+}

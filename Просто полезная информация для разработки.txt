@@ -1,0 +1,5 @@
+await bot.get_chat_member(chat_id=123, user_id=123) - Проверить является ли человек уастником чата
+kickChatMember - кикнуть из канала
+
+unbanChatMember - разбанить чела
+exportChatInviteLink - новая  инвайт ссылка

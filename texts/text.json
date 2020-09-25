@@ -1,0 +1,34 @@
+{
+    "selected_language" : "Selected language.",
+
+    "English": 
+    {
+        "start": "hi! i am  test",
+
+        "start_button_profile" : "Here you can see your active subscriptions. And other information.",
+
+        "start_button_profile_id" : "Your ID: ",
+        "start_button_profile_current_course" : "Active subscription: ",
+        "start_button_profile_left_days" : "Days left: ",
+        "start_button_profile_balance" : "Your balance: ",
+        "start_button_profile_dont_have_course" : "There are no active subscriptions",
+
+        "main_menu_subscribe" : "Choose a pricing plan"
+    }, 
+
+    "Russian": 
+    {
+        "start": "Привет! Здесь вы можете получить доступ к платному каналу или чату, а также посмотреть свои подписки.",
+
+        "start_button_profile" : "Здесь вы можете увидеть свои активные подписки. И другую информацию.",
+
+        "start_button_profile_id" : "Ваш ID: ",
+        "start_button_profile_current_course" : "Активная подписка: ",
+        "start_button_profile_left_days" : "Осталось дней: ",
+        "start_button_profile_balance" : "Ваш баланс: ",
+        "start_button_profile_dont_have_course" : "Нет активной подписки",
+
+        "main_menu_subscribe" : "Выберите тариф."
+    }
+    
+}

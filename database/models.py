@@ -4,7 +4,6 @@ from sqlalchemy import Table, Column, String, Integer, Boolean, MetaData, Foreig
 
 Base = declarative_base()
 
-
 class PurchasedSubscription(Base):
     __tablename__ = 'purchased_subscriptions'
     id = Column(Integer, primary_key=True)
@@ -13,7 +12,11 @@ class PurchasedSubscription(Base):
     data_start = Column(DateTime)
     data_end = Column(DateTime)
 
-
+class ChannelsInCourse(Base):
+    __tablename__ = 'channels_in_courses'
+    id = Column(Integer, primary_key=True)
+    course_id = Column(Integer, ForeignKey('courses.id'))
+    channel_id = Column(Integer, ForeignKey('channels.id'))
 
 class Course(Base):
     __tablename__ = 'courses'
@@ -22,8 +25,16 @@ class Course(Base):
     cost = Column(Integer)
     time = Column(Integer) #Срок курса в днях.
     purchased_subscriptions = relationship("PurchasedSubscription",backref="courses")
-    # users = relationship("User", backref="courses")
-    # purchasedSubsriptions = relationship("purchased_subscriptions", backref='course')
+    channels = relationship("ChannelsInCourse", backref="courses")
+    description = Column(String)
+    is_delete = Column(Boolean, default=False)
+
+class Channel(Base):
+    __tablename__ = 'channels'
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    link = Column(String)
+    courses = relationship("ChannelsInCourse", backref="channels")
 
 class User(Base):
     __tablename__ = 'users'
@@ -37,17 +48,8 @@ class User(Base):
     is_kick = Column(Boolean)
     ending_date = Column(DateTime)
     purchased_subscriptions = relationship("PurchasedSubscription", backref="users")
-    # course_id = Column(Integer, ForeignKey('courses.id'))
     lng = Column(String)
     balance = Column(Float, default=0.0)
-    # purchasedSubsriptions = relationship("purchased_subscriptions", backref='user')
+    last_payload_timestamp = Column(Float)
 
-
-# class PurchasedSubscription(Base):
-#     __tablename__ = 'purchased_subscriptions'
-#     id = Column(Integer, primary_key = True)
-#     user_id = Column(Integer, ForeignKey('users.id'))
-#     course_id = Column(Integer, ForeignKey('courses.id'))
-#     date_start = Column(DateTime)
-#     date_end = Column(DateTime)
 

@@ -13,7 +13,10 @@
         "start_button_profile_balance" : "Your balance: ",
         "start_button_profile_dont_have_course" : "There are no active subscriptions",
 
-        "main_menu_subscribe" : "Choose a pricing plan"
+        "main_menu_subscribe" : "Choose a pricing plan",
+
+        "subscribe_menu_test_payments" : "This is a test payment. Use a Bank card for payment 1111 1111 1111 1026, 12/22, CVC 000"
+
     }, 
 
     "Russian": 
@@ -21,14 +24,45 @@
         "start": "Привет! Здесь вы можете получить доступ к платному каналу или чату, а также посмотреть свои подписки.",
 
         "start_button_profile" : "Здесь вы можете увидеть свои активные подписки. И другую информацию.",
-
         "start_button_profile_id" : "Ваш ID: ",
         "start_button_profile_current_course" : "Активная подписка: ",
         "start_button_profile_left_days" : "Осталось дней: ",
         "start_button_profile_balance" : "Ваш баланс: ",
         "start_button_profile_dont_have_course" : "Нет активной подписки",
 
-        "main_menu_subscribe" : "Выберите тариф."
+        "get_access_main_menu" : "Доступные для вас каналы.",
+        "get_access_main_menu_no_courses" : "К сожалению, у вас нет доступных для вас подписок. Пожалуйста, оформите подписку через главное меню бота или обратитесь к администрации, если считаете, что это ошибка",
+        "get_access_choose_channels" : "Жмите по кнопкне, чтобы вступить в соответствующий канал",
+        
+        "menu_profile_history" : "Ваши подписки: ",
+        "main_menu_subscribe" : "Выберите тариф.",
+               
+        "subscribe_menu_test_payments" : "Это тестовая оплата. Для оплаты используйте карту 1111 1111 1111 1026, 12/22, CVC 000",
+        "subscribe_menu_good_pay" : "Платеж на сумму {amount} {currency} успешно совершен. Вы приобрели {coursename}",
+        
+        "main_admin_menu" : "Добро пожаловать в админ-панель. Здесь вы сможете произвести некоторые настройки.",
+        "admin_menu_managing_courses" : "Здесь вы можете добавлять, удалять и изменять подписки",
+
+        "managing_courses_add" : "Введите название новой подписки.",
+        "managing_course_add_write_description" : "Введите описание",
+        "managing_course_add_write_cost" : "Введите стоимость курса в рублях (Целое число)",
+        "managing_course_add_write_time" : "Введите количество дней на которые будет приобретаться курс.",
+        "managing_course_add_channels" : "Перешлите любое сообщение из канала (Из тех, на которые будет давать доступ подписка)\n или введите ID:Название группы, для добавления группы.\nНапример:'-458757767:TestGroup.\nУже добавлено:\n",
+        "managing_course_confirm" : {"name" : "Название курса", "description" : "Описание", "cost" : "Цена", "time" : "Срок", "access" : "Дает доступ в"},
+
+        "managing_courses_edit" : "Выберите курс, который хотите отредактировать",
+        "managing_courses_edit_info" : {"name" : "Название подписки", "description" : "Описание", "cost" : "Цена", "time" : "Срок", "access" : "Дает доступ в"},
+        "managing_courses_edit_name" : "Введите новое имя подписки",
+        "managing_courses_edit_description" : "Введите новое описание подписки",
+        "managing_courses_edit_cost" : "Введите новую цену подписки",
+        "managing_courses_edit_time" : "Введите новый срок подписки",
+        "managing_courses_edit_access_add" : "Перешлите любое сообщение из канала (Из тех, на которые будет давать доступ подписка)\n или введите ID:Название группы, для добавления группы.\nНапример:'-458757767:TestGroup.\nУже добавлено:\n",
+        "managing_courses_edit_access_delete" : "Введите номер канала для удаления.",
+        
+        "managing_courses_delete" : "Выберите курс для удаления.",
+
+        "admin_menu_managing_users" : "Здесь вы можете управлять пользователями",
+        "managing_users_main_menu_add_course" : "Выберите курс, который хотите добавить пользователю"
     }
     
 }

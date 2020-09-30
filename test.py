@@ -1,7 +1,5 @@
-test = {
-    "key" : "value"
-}
+from datetime import datetime
 
-for key in test.keys():
-    print(key)
-    print(test[key])
+
+date = datetime.now()
+print(date.timestamp())

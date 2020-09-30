@@ -1,1 +1,2 @@
-from .user_handlers import user_handlers
+from . import user_handlers
+from . import admin_handlers

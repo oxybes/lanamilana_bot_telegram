@@ -8,3 +8,8 @@ class UserStateMainMenu(StatesGroup):
 class UserStateProfile(StatesGroup):
     menu_profile = State()
     choose_language = State()
+    history = State()
+
+class UserStateGetAccessCourse(StatesGroup):
+    choose_course = State()
+    choose_channels = State()

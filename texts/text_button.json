@@ -2,14 +2,34 @@
     "English": 
     {
         "start_menu": [  {"get_subscribe" : "❤️Subscribe"}, {"profile" :"👤Profile"}],
-        "profile_menu" : [{ "up_balance" : "💰Up balance" }, { "language" : "🇺🇸Language" }, {"main_menu" : "In main menu"}],
-        "main_menu_back" : "🔙Back"
+        "profile_menu" : [{ "history_subscribe" : "📑History" }, { "language" : "🇺🇸Language" }, {"main_menu" : "In main menu"}],
+        "main_menu_back" : "🔙Back",
+        "profile_menu_back" : "🔙Back"
     }, 
     "Russian": 
     {
-        "start_menu": [ { "get_subscribe" : "❤️Оформить подписку" }, { "profile" : "👤Профиль" } ],
-        "profile_menu" : [{ "up_balance" : "💰Пополнить баланс" }, { "language" : "🇷🇺Язык" }, {"main_menu" : "В главное меню"}],
-        "main_menu_back" : "🔙Назад"
+        "start_menu":  {"get_subscribe" : "❤️Оформить подписку" , "profile" : "👤Профиль", "admin" : "🧠Админ-панель", "get_access"  : "Получить доступ к каналам"},
+        "profile_menu" : { "history_subscribe" : "📑История подписок" , "language" : "🇷🇺Язык" , "main_menu" : "В главное меню"},
+        "main_menu_back" : "🔙Назад",
+        "profile_menu_back" : "🔙Назад",
+
+        "main_admin_menu" : {"managing_courses" : "Управление подписками", "managing_users" : "Управление пользователями", "managing_admins" : "Управление адмиистрацией",
+                             "generate_new_link" : "Сгенерировать новую ссылку", "spam" : "Рассылка пользователям", "back" : "Назад"},
+        
+        "admin_menu_managing_courses" : { "add" : "Добавить", "edit" : "Изменить", "delete" : "Удалить" },
+        "in_admin_menu" : "В админ-панель",
+        "managing_courses_add_continue" : "Продолжить",
+        "managing_courses_add_additionaly_complete" : "Добавить подписку", 
+        "managing_courses_add_additionaly_cancel" : "Отменить",
+
+        "managing_courses_edit_buttons" : {"name" : "Имя", "description" : "Описание", "cost" : "Цена", "time" : "Срок", "access_add" : "Добавить канал", "access_delete" : "Удалить канал", "back" : "Назад"},
+        "managing_course_edit_back" : "Назад",
+        "managing_course_delete_back" : "Назад",
+        "access_menu_get_course_back" : "Назад",
+        "get_access_choose_channels_back" : "Назад",
+
+        "managing_users_main_menu" : { "add_course" : "Добавить подписку", "delete_course" : "Удалить подписку", "add_time" : "Добавить время подписки", "delete_time" : "Уменьшить время", "back" : "Назад"},
+        "managing_users_add_course_back" : "Назад"
     }
     
 }

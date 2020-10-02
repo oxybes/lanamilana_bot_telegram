@@ -29,6 +29,7 @@ class AdminStateManagingUser(StatesGroup):
     main_menu = State()
     add_course = State()
     add_course_choouse_user = State()
+    add_course_choouse_user_final = State()
     delete_course = State()
     delete_course_choouse_user = State()
     add_time = State()

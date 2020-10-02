@@ -1,5 +1,7 @@
+from aiogram import types
 from config import get_text, get_text_but
 from database.models import User, Course
+from database.function import DataBaseFunc
 
 class AdminHelper():
     """Помощник для админ-панели"""
@@ -47,3 +49,17 @@ class AdminHelper():
         for channel in course.channels:
             text = text + f"{channel.id}  {channel.channels.name}\n"
         return text
+
+
+    @staticmethod
+    def get_user_from_message(message : types.Message):
+        """Возвращает пользователя из сообщения администратора"""
+        if (message.forward_from):
+            return DataBaseFunc.get_user(message.from_user.id)
+        else:
+            return DataBaseFunc.get_user(message.text)
+            
+    @staticmethod
+    def managing_users_get_info_user(admin_user : User, user:User):
+        """Возврщаает инфорацию о пользователе при добавлении курса"""
+        return "pass"

@@ -29,7 +29,9 @@
         "get_access_choose_channels_back" : "Назад",
 
         "managing_users_main_menu" : { "add_course" : "Добавить подписку", "delete_course" : "Удалить подписку", "add_time" : "Добавить время подписки", "delete_time" : "Уменьшить время", "back" : "Назад"},
-        "managing_users_add_course_back" : "Назад"
+        "managing_users_add_course_back" : "Назад",
+        "admin_menu_managing_users_add_course_back" :"Назад",
+        "managing_users_main_menu_add_course_choose_user" : {"add" : "Добавить", "cancel" : "Отменить"}
     }
     
 }

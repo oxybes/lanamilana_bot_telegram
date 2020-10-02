@@ -131,4 +131,23 @@ class AdminGenerateKeyboard():
         keyboard.add(InlineKeyboardButton(get_text_but(user, 'managing_users_add_course_back'), callback_data="managing_users_add_course_back"))
         return keyboard
 
+
+    
+
+    @staticmethod
+    def admin_menu_managing_users_add_course(user : User) -> InlineKeyboardMarkup():
+        """"Генерирует клавиатуру при выборе пользователя курса"""
+        keyboard = InlineKeyboardMarkup()
+        keyboard.add(InlineKeyboardButton(get_text_but(user, 'admin_menu_managing_users_add_course_back'), callback_data='admin_menu_managing_users_add_course_back'))
+        return keyboard
+
+    @staticmethod
+    def managing_users_main_menu_add_course_choose_user(user : User) -> InlineKeyboardMarkup():
+        """Подтвердить или отменить добавление курса"""
+        keyboard = InlineKeyboardMarkup()
+        data = get_text_but(user, 'managing_users_main_menu_add_course_choose_user')
+        add = InlineKeyboardButton(text = data['add'], callback_data='managing_users_main_menu_add_course_choose_user_add')
+        cancel = InlineKeyboardButton(text = data['cancel'], callback_data='managing_users_main_menu_add_course_choose_user_cancel')
+        keyboard.add(add, cancel)
+        return keyboard
     #region

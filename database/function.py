@@ -115,13 +115,19 @@ class DataBaseFunc():
 
     #region Работа с классом User
     @staticmethod
-    def get_user(id: int) -> User:
+    def get_user(param: int) -> User:
         """Возвращает объект User из базы данных 
         Параметры: 
             id - telegram id пользователя
         Возвращает:
             user - объект пользователя из базы данных"""
-        return session.query(User).filter_by(id=id).first()
+        if isinstance(param, int):
+            return session.query(User).filter_by(id=param).first()
+        elif isinstance(param, str):
+            return session.query(User).filter_by(username=param).first()
+        else:
+            return None
+
     #endregion
 
     #region Работа с классом Chanell

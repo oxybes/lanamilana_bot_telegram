@@ -64,7 +64,8 @@
         "admin_menu_managing_users" : "Здесь вы можете управлять пользователями",
         "managing_users_main_menu_add_course" : "Выберите курс, который хотите добавить пользователю",
         "managing_users_main_menu_add_course_choose_user" : "Введите логин пользователя или перешлите его любое сообщение.",
-        "managing_users_mein_menu_add_course_choose_user_not_found" : "Пользователь не найден. Проверьте правильность введенных данных или убедитесь, что пользователь регистрировался в боте."
+        "managing_users_mein_menu_add_course_choose_user_not_found" : "Пользователь не найден. Проверьте правильность введенных данных или убедитесь, что пользователь регистрировался в боте.",
+        "managing_users_get_info_user" : "*Пользователь*: {username}\n*ID*: {id}\n*Имеет подписки*:\n{subs} "
     }
     
 }

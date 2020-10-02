@@ -1,3 +1,4 @@
+from datetime import datetime
 from aiogram import types
 from config import get_text, get_text_but
 from database.models import User, Course
@@ -62,4 +63,9 @@ class AdminHelper():
     @staticmethod
     def managing_users_get_info_user(admin_user : User, user:User):
         """Возврщаает инфорацию о пользователе при добавлении курса"""
-        return "pass"
+        text = get_text(admin_user, 'managing_users_get_info_user')
+        subs = "• "
+        for ph in [purch for purch in user.purchased_subscriptions if purch.data_end > datetime.now()]:
+            subs += ph.courses.name + '\n• '
+        text = text.format(username=user.username, id=user.id, subs=subs[:-1])
+        return text

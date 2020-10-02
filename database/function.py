@@ -128,6 +128,10 @@ class DataBaseFunc():
         else:
             return None
 
+    @staticmethod
+    def get_users_with_subscribe():
+        return session.query(User).all()
+
     #endregion
 
     #region Работа с классом Chanell

@@ -60,7 +60,18 @@ async def managing_users_main_menu_add_course_choose_user(message : types.Messag
         await AdminStateManagingUser.add_course_choouse_user_final.set()
     else:
         await message.delete()
-        await bot.edit_message_text(chat_id=message.chat.id, message_id=data['message_id'],text=get_text(user, 'managing_users_mein_menu_add_course_choose_user_not_found'), reply_markup=AdminGenerateKeyboard.admin_menu_managing_users_add_course(user))
+        await bot.edit_message_text(chat_id=message.chat.id, message_id=data['message_id'],text=get_text(user, 'managing_users_mein_menu_add_course_choose_user_not_found'), parse_mode=types.ParseMode.MARKDOWN_V2,reply_markup=AdminGenerateKeyboard.admin_menu_managing_users_add_course(user))
+
+@dp.callback_query_handler(lambda callback: callback.data == "managing_users_main_menu_add_course_choose_user_add", state = AdminStateManagingUser.add_course_choouse_user_final)
+async def managing_users_main_menu_add_course_choose_user_add(callback : types.CallbackQuery):
+    """Обработка кнопки добавить подписку пользователю"""
+    await callback.answer()
+
+@dp.callback_query_handler(lambda callback: callback.data == "managing_users_main_menu_add_course_choose_user_cancel", state = AdminStateManagingUser.add_course_choouse_user_final)
+async def managing_users_main_menu_add_course_choose_user_cancel(callback : types.CallbackQuery):
+    """Обработка кнопки отменить добавление подписки пользователю"""
+    await callback.answer()
+
 #endregion
 
 

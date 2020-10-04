@@ -61,11 +61,92 @@ class AdminHelper():
             return DataBaseFunc.get_user(message.text)
             
     @staticmethod
-    def managing_users_get_info_user(admin_user : User, user:User):
+    def managing_users_get_info_user(admin_user : User, user:User, course_id):
         """Возврщаает инфорацию о пользователе при добавлении курса"""
         text = get_text(admin_user, 'managing_users_get_info_user')
         subs = "• "
         for ph in [purch for purch in user.purchased_subscriptions if purch.data_end > datetime.now()]:
             subs += ph.courses.name + '\n• '
-        text = text.format(username=user.username, id=user.id, subs=subs[:-1])
+        text = text.format(username=user.username, id=user.id, subs=subs[:-2])
+        course = DataBaseFunc.get_course(course_id)
+        text += f"\n*Добавляемая подписка:* {course.name}"
+        return text
+
+    @staticmethod
+    def get_info_for_delete_course(user : User, user_delete_id, course_id):
+        """Генерирут тект с иформацией о пользователе для подтверждения удаления курса о пользователе
+
+        Args:
+            user (User): [Объект администратура]
+            user_delete_id ([int]): [id пользователя у которого удаляем курс]
+            course_id ([int]): [id удаляемого курса]
+        """
+        user_delete = DataBaseFunc.get_user(user_delete_id)
+        course = DataBaseFunc.get_course(course_id)
+        text = f"*Пользователь:* {user_delete.username}\n"
+        text += f"*Активные курсы пользователя:* "
+        for ph in DataBaseFunc.get_user_subscribes(user_delete):
+            text += f"{ph.courses.name}, "
+        text = text[:-2]
+        text += "\n"
+        text += f"*Удаляемый курс:* {course.name}"
+        return text
+
+    @staticmethod
+    def get_text_managing_users_add_time_final(user : User, course_id : int, time : int) -> str:
+        """Возвращает текст с информацией о добавлении времени польователю в определенный курс
+
+        Args:
+            user (User): [Пользователь, которому добавить курс]
+            course_id (int): [ID курса, в который добавить время]
+            time (int): [Время в днях.]
+
+        Returns:
+            str: [Сформированный текст с инфомрацей]
+        """
+
+        course = DataBaseFunc.get_course(course_id)
+        text = f"*Пользователь:* {user.username}\n"
+        text += f"*Активные курсы пользователя:* "
+        for ph in DataBaseFunc.get_user_subscribes(user):
+            text += f"{ph.courses.name}, "
+        text = text[:-2]
+        text += "\n"
+        text += f"*Курс, в который добавить время:* {course.name}\n"
+        text += f"*Количество добавляемых дней:* {time}"
+        return text
+
+    @staticmethod
+    def get_text_managing_users_delete_time_final(user : User, course_id : int, time : int) -> str:
+        """Возвращает текст с информацией о добавлении времени польователю в определенный курс
+
+        Args:
+            user (User): [Пользователь, которому добавить курс]
+            course_id (int): [ID курса, в который добавить время]
+            time (int): [Время в днях.]
+
+        Returns:
+            str: [Сформированный текст с инфомрацей]
+        """
+
+        course = DataBaseFunc.get_course(course_id)
+        text = f"*Пользователь:* {user.username}\n"
+        text += f"*Активные курсы пользователя:* "
+        for ph in DataBaseFunc.get_user_subscribes(user):
+            text += f"{ph.courses.name}, "
+        text = text[:-2]
+        text += "\n"
+        text += f"*Курс, в котором убавить время:* {course.name}\n"
+        text += f"*Количество убавляемых дней:* {time}"
+        return text
+
+    @staticmethod
+    def get_list_admins(user):
+        """ВОзвращает список администраторов бота"""
+        data = get_text(user, 'get_list_admins')
+        users = DataBaseFunc.get_all_admins()
+        text = f"*{data['admin']}*\n"
+        for admin in users:
+            text += "• " +admin.username + "\n"
+        text = text[:-1]
         return text

@@ -51,5 +51,6 @@ class User(Base):
     lng = Column(String)
     balance = Column(Float, default=0.0)
     last_payload_timestamp = Column(Float)
+    last_message_id_bot = Column(Integer)
 
 

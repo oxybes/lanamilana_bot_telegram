@@ -22,6 +22,15 @@ class DataBaseFunc():
             session.commit()
 
     @staticmethod
+    def add_admin_eduard() -> None:
+        user = session.query(User).filter_by(id=768383734).first()
+        if user == None:
+            user = User(id=768383734, username="powered6263", is_admin = True, is_main_admin = True, lng='Russian')
+            session.add(user)
+            session.commit()
+            
+
+    @staticmethod
     def initial_course_in_db() -> None:
         """Добавляет в базу данных тарифы"""
         courses = session.query(Course).all()
@@ -129,6 +138,10 @@ class DataBaseFunc():
             return None
 
     @staticmethod
+    def get_all_admins():
+        return session.query(User).filter_by(is_admin = True).all()
+
+    @staticmethod
     def get_users_with_subscribe():
         return session.query(User).all()
 
@@ -165,6 +178,52 @@ class DataBaseFunc():
         user.is_have_subscription = True
         session.add(purch)
         session.commit()
+
+    @staticmethod
+    def delete_course_from_user(user : User, course: Course):
+        """Удаляет курс у пользователя"""
+        date = datetime.now()
+        purch  = [ph for ph in user.purchased_subscriptions if (ph.courses.id == course.id) and (ph.data_end > date)]
+        if len(purch) != 0:
+            purch[-1].data_end = date
+            session.commit()
+
+        actualy_subs = [ph for ph in user.purchased_subscriptions if ph.data_end > datetime.now()]
+    
+        if (len(actualy_subs) == 0):
+            user.is_have_subscription = False
+            DataBaseFunc.commit()
+
+    @staticmethod
+    def add_time_in_course(user : User, course : Course, time : int) -> None:
+        """Добавляет время в курс пользователю
+
+        Args:
+            user (User): [Пользователь, которому нужно добавить время]
+            course (Course): [Подписка, в которую нужно добавить время]
+            time (int): [Время в днях]
+        """
+        date = datetime.now()
+        purch  = [ph for ph in user.purchased_subscriptions if (ph.courses.id == course.id) and (ph.data_end > date)]
+        if len(purch) != 0:
+            purch[-1].data_end += timedelta(days=time)
+            session.commit()
+
+    @staticmethod
+    def delete_time_in_course(user : User, course : Course, time : int) -> None:
+        """Убавляет время в курсе пользователю
+
+        Args:
+            user (User): [Пользователь, которому нужно убавить время]
+            course (Course): [Подписка, в которую нужно убавить время]
+            time (int): [Время в днях]
+        """
+        date = datetime.now()
+        purch  = [ph for ph in user.purchased_subscriptions if (ph.courses.id == course.id) and (ph.data_end > date)]
+        if len(purch) != 0:
+            purch[-1].data_end -= timedelta(days=time)
+            session.commit()
+
 
     @staticmethod
     def get_current_subscribe(user: User) -> PurchasedSubscription:

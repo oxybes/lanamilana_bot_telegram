@@ -9,24 +9,27 @@ from handlers.admin_handlers.helpers.admin_state import AdminStateMainMenu
 from handlers.admin_handlers.helpers.generate_keyboard import AdminGenerateKeyboard
 
 
-### https://t.me/lanamilana_bot?start=fasfasf
-
 @dp.message_handler(commands = ['start'], state = '*')
 async def start_message(message: types.Message):
     """Обработчик команды /start."""
 
     user = DataBaseFunc.get_user(message.from_user.id)
-    
+    await message.delete()
     if user == None or user.lng == None:
-        user = User(id = message.from_user.id, username=message.from_user.username)
+        user = User(id = message.from_user.id, username=message.from_user.username, lng="Russian")
         DataBaseFunc.add(user)
         DataBaseFunc.commit()
-        await message.answer(TEXTS["selected_language"], reply_markup=UserGeneratorKeyboard.choose_lng())
-        await UserStateMainMenu.chooselng.set()
+        info_mes = await message.answer(get_text(user, 'start'), reply_markup=UserGeneratorKeyboard.start_button(user))
+        user.last_message_id_bot = info_mes.message_id
+        await UserStateMainMenu.main_menu.set()
 
     else:
+        if user.last_message_id_bot:
+            await bot.delete_message(chat_id=message.chat.id, message_id=user.last_message_id_bot)
         await message.answer(get_text(user,'start'), reply_markup=UserGeneratorKeyboard.start_button(user))
         await UserStateMainMenu.main_menu.set()
+
+
 
 @dp.callback_query_handler(state=UserStateMainMenu.chooselng)
 async def choose_lng(callback_query:types.CallbackQuery):

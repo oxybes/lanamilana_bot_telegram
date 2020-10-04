@@ -27,7 +27,6 @@
         "start_button_profile_id" : "Ваш ID: ",
         "start_button_profile_current_course" : "Активная подписка: ",
         "start_button_profile_left_days" : "Осталось дней: ",
-        "start_button_profile_balance" : "Ваш баланс: ",
         "start_button_profile_dont_have_course" : "Нет активной подписки",
 
         "get_access_main_menu" : "Доступные для вас каналы.",
@@ -65,7 +64,37 @@
         "managing_users_main_menu_add_course" : "Выберите курс, который хотите добавить пользователю",
         "managing_users_main_menu_add_course_choose_user" : "Введите логин пользователя или перешлите его любое сообщение.",
         "managing_users_mein_menu_add_course_choose_user_not_found" : "Пользователь не найден. Проверьте правильность введенных данных или убедитесь, что пользователь регистрировался в боте.",
-        "managing_users_get_info_user" : "*Пользователь*: {username}\n*ID*: {id}\n*Имеет подписки*:\n{subs} "
+        "managing_users_get_info_user" : "*Пользователь*: {username}\n*ID*: {id}\n*Имеет подписки*:\n{subs} ",
+        "managing_users_main_menu_add_course_choose_user_add" : "Курс успешно добавлен.",
+
+        "managing_users_main_menu_delete_course" : "Введите логин пользователя, либо перешлите любое его сообщение",
+        "managin_users_main_menu_delete_course_choose_use" : "Выберите доступный курс для удаления.",
+        "managing_users_delete_course_final_add" : "Подписка {course} у пользователя {username} успешно удалена.",
+        "managing_users_main_menu_add_course_choose_user_not_found" : "Пользователь в базе данных не найден. Убедитесь в правильности введенных данных или в регистрации пользователя и повторите сообщение",
+
+        "managing_users_add_time_choose_user" : "Введите логин пользователя, либо перешлите любое его сообщение", 
+        "managing_users_add_time_choose_user_not_found" : "Пользователь в базе данных не найден. Убедитесь в правильности введенных данных или в регистрации пользователя и повторите сообщение",
+        "managing_users_add_time_choose_courses" : "Выберите курс пользователя для добавления времени",
+        "managing_users_add_time_choose_time" : "Введите количество дней, на которые продлить курс",
+        "managing_user_add_time_write_time_not_str" : "Пожалуйста, введите число дней в численном формате.",
+        "managing_users_add_time_final_add" : "Время успешно добавлено",
+        "managing_users_add_time_final_delete" : "Время успешно убавлено",
+        
+        "managing_users_delete_time_choose_courses" : "Выберите подписку пользователя для убавления времени",
+        "managing_users_delete_time_choose_time" : "Введите количество дней, на которые уменьшить подписку",
+        "managing_users_delete_time_final_add" : "Время успешно убавлено",
+
+
+        "admin_menu_managing_admins" : "Здесь вы можете управлять администрацией бота.",
+        "get_list_admins" : {"main" : "Главный администратор:", "admin" : "Администраторы:"},
+        "managing_admins_main_menu_add_admin" : "Введите логин пользователя, либо перешлите любое его сообщение, чтобы назначить администратором",
+        "managing_admins_main_menu_add_admin_not_found" : "Пользователя нет в базе данных. Убедитесь, что ввели данные и правильно, а также в регистрации пользователя",
+        "managing_admins_main_menu_add_admin_success" : "Права администратора успешно добавлены пользователю {username}",
+
+        "managing_admins_main_menu_delete_admin" : "Введите логин пользователя, либо перешлите любое его сообщение, чтобы убрать из администраторов",
+        "managing_admins_main_menu_delete_admin_not_found" : "Пользователя нет в базе данных. Убедитесь, что ввели данные и правильно, а также в регистрации пользователя",
+        "managing_admins_main_menu_delete_admin_success" : "Права администратора успешно убраны у пользователю {username}"
+        
     }
     
 }

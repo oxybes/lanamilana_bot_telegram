@@ -2,18 +2,18 @@
     "English": 
     {
         "start_menu": [  {"get_subscribe" : "❤️Subscribe"}, {"profile" :"👤Profile"}],
-        "profile_menu" : [{ "history_subscribe" : "📑History" }, { "language" : "🇺🇸Language" }, {"main_menu" : "In main menu"}],
+        "profile_menu" : [{ "history_subscribe" : "📑History" }, { "language" : "🇺🇸Language" } , {"main_menu" : "In main menu"}],
         "main_menu_back" : "🔙Back",
         "profile_menu_back" : "🔙Back"
     }, 
     "Russian": 
     {
         "start_menu":  {"get_subscribe" : "❤️Оформить подписку" , "profile" : "👤Профиль", "admin" : "🧠Админ-панель", "get_access"  : "Получить доступ к каналам"},
-        "profile_menu" : { "history_subscribe" : "📑История подписок" , "language" : "🇷🇺Язык" , "main_menu" : "В главное меню"},
+        "profile_menu" : { "history_subscribe" : "📑История подписок", "main_menu" : "В главное меню"},
         "main_menu_back" : "🔙Назад",
         "profile_menu_back" : "🔙Назад",
 
-        "main_admin_menu" : {"managing_courses" : "Управление подписками", "managing_users" : "Управление пользователями", "managing_admins" : "Управление адмиистрацией",
+        "main_admin_menu" : {"managing_courses" : "Управление подписками", "managing_users" : "Управление пользователями", "managing_admins" : "Управление администрацией",
                              "generate_new_link" : "Сгенерировать новую ссылку", "spam" : "Рассылка пользователям", "back" : "Назад"},
         
         "admin_menu_managing_courses" : { "add" : "Добавить", "edit" : "Изменить", "delete" : "Удалить" },
@@ -31,7 +31,22 @@
         "managing_users_main_menu" : { "add_course" : "Добавить подписку", "delete_course" : "Удалить подписку", "add_time" : "Добавить время подписки", "delete_time" : "Уменьшить время", "back" : "Назад"},
         "managing_users_add_course_back" : "Назад",
         "admin_menu_managing_users_add_course_back" :"Назад",
-        "managing_users_main_menu_add_course_choose_user" : {"add" : "Добавить", "cancel" : "Отменить"}
+        "managing_users_main_menu_add_course_choose_user" : {"add" : "Добавить", "cancel" : "Отменить"},
+
+        "managing_users_main_menu_delete_course_back" : "Назад",
+        "managin_users_main_menu_delete_course_choose_use_back" : "Назад",
+        "managing_users_delete_course_final_add" : "Подтвердить",
+        "managing_users_delete_course_final_cancel" : "Отмена",
+ 
+        "managign_users_add_time_back" : "Назад",
+        "managing_users_add_time_choose_course_back" : "Назад",
+        "managing_users_add_time_choose_time_back" : "Назад",
+        "managing_users_add_time_final_add" : "Добавить",
+        "managing_users_add_time_final_cancel" : "Отмена",
+
+        "admin_menu_managing_admins" : {"list_admins" : "Список админов","add_admin" : "Добавить админа", "delete_admin" : "Удалить админа","back" : "Назад"},
+        "managing_admin_list_admins_back" : "Назад",
+        "managing_admins_main_menu_add_admin_back" : "Назад"
     }
     
 }

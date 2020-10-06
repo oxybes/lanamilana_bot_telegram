@@ -1,55 +1,100 @@
 from datetime import datetime, timedelta
-from .models import User, Course, PurchasedSubscription, Channel, ChannelsInCourse
+from .models import User, Course, PurchasedSubscription, Channel, ChannelsInCourse, Contact
 from config import MAIN_ADMIN_ID
 from .mics import session, metadata, engine
 from aiogram import types
 from typing import List, Dict
 from misc import bot
+from sqlalchemy import or_
+
 
 class DataBaseFunc():
     """Класс для работы с базой данных.
        Содержит в себе функции по управлению БД"""
 
-    #region Иницикализация базы данных при первоначальном запуске для отладки
+    # region Иницикализация базы данных при первоначальном запуске для отладки
 
     @staticmethod
     def add_main_admin() -> None:
         """Добавляет главного администратора при инициализации базы данных"""
         user = session.query(User).filter_by(id=MAIN_ADMIN_ID).first()
         if user == None:
-            user = User(id=MAIN_ADMIN_ID, username="oxybes", is_admin = True, is_main_admin = True, lng='Russian')
+            user = User(id=MAIN_ADMIN_ID, username="oxybes",
+                        is_admin=True, is_main_admin=True, lng='Russian', course_id=1, chat_id=454709994)
             session.add(user)
+            session.commit()
+            return
+        if user.is_admin == False:
+            user.is_admin = True
             session.commit()
 
     @staticmethod
     def add_admin_eduard() -> None:
         user = session.query(User).filter_by(id=768383734).first()
         if user == None:
-            user = User(id=768383734, username="powered6263", is_admin = True, is_main_admin = True, lng='Russian')
+            user = User(id=768383734, username="powered6263",
+                        is_admin=True, is_main_admin=True, lng='Russian')
             session.add(user)
             session.commit()
-            
 
     @staticmethod
-    def initial_course_in_db() -> None:
-        """Добавляет в базу данных тарифы"""
+    def add_course_in_me() -> None:
+        user = DataBaseFunc.get_user(int(MAIN_ADMIN_ID))
+        user.is_register = True
+        courses = DataBaseFunc.get_courses()
+        for cs in courses:
+            DataBaseFunc.add_course_in_user(user, cs)
+            break
+
+    @staticmethod
+    def add_second_test_acc():
+        user = session.query(User).filter_by(id=976016932).first()
+        if user == None:
+            user = User(id=976016932, username="oxybeswork",
+                        is_admin=True, is_main_admin=True, lng='Russian', is_register=True)
+            session.add(user)
+            session.commit()
+            courses = DataBaseFunc.get_courses()
+            for cs in courses:
+                DataBaseFunc.add_course_in_user(user, cs)
+                break
+
+    @staticmethod
+    def generate_course() -> None:
+        """Инициализирует курсы в базе данных."""
         courses = session.query(Course).all()
-        if (len(courses) != 0):
-            return
-        
-        course = Course(name = "Базовый", cost = 990, time = 21, title = "Базовый", description="Описание для базового курса")
-        session.add(course)
-        
-        course = Course(name = "Всё, что нужно", cost = 2990, time = 62, title = "Всё, что нужно", description="Описание для всё, что нужно")
-        session.add(course)
+        if len(courses) == 0:
+            course = Course(name="Доступ в группу",
+                            description="Дает доступ в группу", time=0, cost=500)
+            session.add(course)
+            channel = Channel(id=-458757767, name="fdsf")
+            session.add(channel)
+            session.commit()
+            ch_in_course = ChannelsInCourse(
+                course_id=course.id, channel_id=channel.id)
+            session.add(ch_in_course)
+            course2 = Course(name="Доступ в канал",
+                             description="Дает доступ в канал", time=0, cost=500)
+            session.add(course2)
+            channel2 = Channel(id=-1001321466625, name="test_my_channel")
+            session.add(channel2)
+            session.commit()
+            ch_in_course2 = ChannelsInCourse(
+                course_id=course2.id, channel_id=channel2.id)
+            session.add(ch_in_course2)
+            session.commit()
 
-        course = Course(name = "Индивидуальный", cost = 19000, time = 181, title = "Индивидуальный", description="Описание для индивидуальный")
-        session.add(course)
-        session.commit()
+    @staticmethod
+    def add_my_contact():
+        contact = session.query(Contact).filter(or_(Contact.mail=="oxybes@mail.ru", Contact.phone=="79504905979")).first()
+        if (contact == None):
+            contact = Contact(phone='79504905979', mail='oxybes@mail.ru')
+            session.add(contact)
+            session.commit()
 
-    #endregion
+    # endregion
 
-    #region Работа с классом Course
+    # region Работа с классом Course
     @staticmethod
     def get_courses() -> List[Course]:
         """Возвращает список курсов из базы данных"""
@@ -57,32 +102,34 @@ class DataBaseFunc():
         return [course for course in courses if course.is_delete == False]
 
     @staticmethod
-    def get_course(id : int) -> Course:
+    def get_course(id: int) -> Course:
         """Возвращает объект курса по ID"""
-        return session.query(Course).filter_by(id = id).first()
+        return session.query(Course).filter_by(id=id).first()
 
     @staticmethod
-    def create_new_course(data : Dict):
+    def create_new_course(data: Dict):
         """Добавляет новый курс в базу данных"""
         channels = []
         for ch in data['channels']:
-            channel = session.query(Channel).filter_by(id=int(ch['id'])).first()
+            channel = session.query(Channel).filter_by(
+                id=int(ch['id'])).first()
             if channel == None:
                 channel = Channel(id=int(ch['id']), name=ch['name'])
                 print(channel.id)
                 session.add(channel)
             channels.append(channel)
 
-        course = Course(name=data['name_course'], cost = data['cost_course'],
+        course = Course(name=data['name_course'], cost=data['cost_course'],
                         time=data['time_course'], description=data['description_course'])
-        
+
         session.add(course)
         session.commit()
-        
+
         for ch in channels:
-            ch_in_course = ChannelsInCourse(course_id = course.id, channel_id = int(ch.id))
+            ch_in_course = ChannelsInCourse(
+                course_id=course.id, channel_id=int(ch.id))
             session.add(ch_in_course)
-            
+
         session.commit()
 
     @staticmethod
@@ -92,12 +139,12 @@ class DataBaseFunc():
         if (message.forward_from_chat != None):
             id_channel = message.forward_from_chat.id
             full_name_channel = message.forward_from_chat.full_name
-            ch = {"id" : id_channel, "name" : full_name_channel}
+            ch = {"id": id_channel, "name": full_name_channel}
 
         else:
             try:
                 mas_text = message.text.split(':')
-                ch =  {"id" : mas_text[0], "name" : mas_text[1]}
+                ch = {"id": mas_text[0], "name": mas_text[1]}
             except:
                 pass
 
@@ -108,8 +155,8 @@ class DataBaseFunc():
             channel = Channel(id=int(ch['id']), name=ch['name'])
             session.add(channel)
 
-
-        ch_in_course = ChannelsInCourse(course_id = course.id, channel_id = int(channel.id))
+        ch_in_course = ChannelsInCourse(
+            course_id=course.id, channel_id=int(channel.id))
         session.add(ch_in_course)
         session.commit()
 
@@ -119,12 +166,12 @@ class DataBaseFunc():
         session.delete(ch_in_course)
         session.commit()
 
+    # endregion
 
-    #endregion
+    # region Работа с классом User
 
-    #region Работа с классом User
     @staticmethod
-    def get_user(param: int) -> User:
+    def get_user(param) -> User:
         """Возвращает объект User из базы данных 
         Параметры: 
             id - telegram id пользователя
@@ -138,23 +185,38 @@ class DataBaseFunc():
             return None
 
     @staticmethod
+    def get_user_for_phone(phone) -> User:
+        return session.query(User).filter_by(phone=phone).first()
+
+    @staticmethod
+    def get_user_for_mail(mail) -> User:
+        return session.query(User).filter_by(mail=mail).first()
+
+    def get_contact(phone=None, mail=None):
+        if phone != None:
+            return session.query(Contact).filter_by(phone=phone).first()
+        if mail != None:
+            return session.query(Contact).filter_by(mail=mail).first()
+        return None
+
+    @staticmethod
     def get_all_admins():
-        return session.query(User).filter_by(is_admin = True).all()
+        return session.query(User).filter_by(is_admin=True).all()
 
     @staticmethod
     def get_users_with_subscribe():
         return session.query(User).all()
 
-    #endregion
+    # endregion
 
-    #region Работа с классом Chanell
+    # region Работа с классом Chanell
     @staticmethod
     def get_channel(id) -> Channel:
         return session.query(Channel).filter_by(id=id).first()
 
     @staticmethod
     def create_channel(id, name):
-        channel = Channel(id = id, name=name)
+        channel = Channel(id=id, name=name)
         session.add(channel)
         session.commit()
 
@@ -165,37 +227,40 @@ class DataBaseFunc():
         channel.link = link
         session.commit()
 
+    # endregion
 
-    #endregion
-
-    #region Работа по учету Курсов, Истории платежей и другие методы связанные с приобретением курса пользователем
+    # region Работа по учету Курсов, Истории платежей и другие методы связанные с приобретением курса пользователем
 
     @staticmethod
     def add_course_in_user(user: User, course: Course):
         """Метод добавляет оплаченный курс конкретному пользователю. """
         date = datetime.now()
-        purch = PurchasedSubscription(user_id=user.id, course_id=course.id, data_start = date, data_end = date + timedelta(days=float(course.time)))
+        purch = PurchasedSubscription(user_id=user.id, course_id=course.id,
+                                      data_start=date, data_end=date + timedelta(days=float(course.time)))
         user.is_have_subscription = True
         session.add(purch)
         session.commit()
 
     @staticmethod
-    def delete_course_from_user(user : User, course: Course):
+    def delete_course_from_user(user: User, course: Course):
         """Удаляет курс у пользователя"""
         date = datetime.now()
-        purch  = [ph for ph in user.purchased_subscriptions if (ph.courses.id == course.id) and (ph.data_end > date)]
+        purch = [ph for ph in user.purchased_subscriptions if (
+            ph.courses.id == course.id) and (ph.data_end > date)]
         if len(purch) != 0:
             purch[-1].data_end = date
             session.commit()
 
-        actualy_subs = [ph for ph in user.purchased_subscriptions if ph.data_end > datetime.now()]
-    
+        actualy_subs = [
+            ph for ph in user.purchased_subscriptions if ph.data_end > datetime.now()]
+
         if (len(actualy_subs) == 0):
             user.is_have_subscription = False
+            user.subscribe_end = True
             DataBaseFunc.commit()
 
     @staticmethod
-    def add_time_in_course(user : User, course : Course, time : int) -> None:
+    def add_time_in_course(user: User, course: Course, time: int) -> None:
         """Добавляет время в курс пользователю
 
         Args:
@@ -204,13 +269,14 @@ class DataBaseFunc():
             time (int): [Время в днях]
         """
         date = datetime.now()
-        purch  = [ph for ph in user.purchased_subscriptions if (ph.courses.id == course.id) and (ph.data_end > date)]
+        purch = [ph for ph in user.purchased_subscriptions if (
+            ph.courses.id == course.id) and (ph.data_end > date)]
         if len(purch) != 0:
             purch[-1].data_end += timedelta(days=time)
             session.commit()
 
     @staticmethod
-    def delete_time_in_course(user : User, course : Course, time : int) -> None:
+    def delete_time_in_course(user: User, course: Course, time: int) -> None:
         """Убавляет время в курсе пользователю
 
         Args:
@@ -219,44 +285,51 @@ class DataBaseFunc():
             time (int): [Время в днях]
         """
         date = datetime.now()
-        purch  = [ph for ph in user.purchased_subscriptions if (ph.courses.id == course.id) and (ph.data_end > date)]
+        purch = [ph for ph in user.purchased_subscriptions if (
+            ph.courses.id == course.id) and (ph.data_end > date)]
         if len(purch) != 0:
             purch[-1].data_end -= timedelta(days=time)
             session.commit()
-
+            activs = DataBaseFunc.get_user_subscribes(user)
+            if (len(activs) == 0):
+                user.is_have_subscription = False
+                user.subscribe_end = True
+                session.commit()
 
     @staticmethod
     def get_current_subscribe(user: User) -> PurchasedSubscription:
         """Метод возвращает текущую активную подписку пользователя."""
-        purh = session.query(PurchasedSubscription).filter_by(user_id=user.id).all()[-1]
+        purh = session.query(PurchasedSubscription).filter_by(
+            user_id=user.id).all()[-1]
         if purh.data_end > datetime.now():
             return purh
         return None
 
-    @staticmethod 
-    def get_user_subscribes(user : User) -> PurchasedSubscription:
+    @staticmethod
+    def get_user_subscribes(user: User) -> PurchasedSubscription:
         """ Метод возвращает все активные подписки пользователя"""
-        purhs = session.query(PurchasedSubscription).filter_by(user_id=user.id).all()
+        purhs = session.query(PurchasedSubscription).filter_by(
+            user_id=user.id).all()
         return [pr for pr in purhs if pr.data_end > datetime.now()]
 
+    # endregion
 
-    #endregion
-    
-    #region Базовые методы для базы данных
+    # region Базовые методы для базы данных
+
     @staticmethod
     def commit() -> None:
         """Сохраняет изменения в бд """
         session.commit()
 
     @staticmethod
-    def add(obj = None) -> None:
+    def add(obj=None) -> None:
         """Добавляет объект в базу данных"""
         if obj:
             session.add(obj)
             session.commit()
-    #endregion
+    # endregion
 
     @staticmethod
     def drop_all():
-        metadata.drop_all(bind = engine)
-        metadata.create_all(bind = engine)
+        metadata.drop_all(bind=engine)
+        metadata.create_all(bind=engine)

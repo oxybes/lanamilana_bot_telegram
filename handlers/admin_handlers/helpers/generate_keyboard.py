@@ -30,11 +30,12 @@ class AdminGenerateKeyboard():
         """Клавиатура для управления подписками"""
         keyboard = InlineKeyboardMarkup()
         dict_buttons = get_text_but(user, 'admin_menu_managing_courses')
-        butt_add = InlineKeyboardButton(dict_buttons['add'], callback_data='managing_courses_add')
+        # butt_add = InlineKeyboardButton(dict_buttons['add'], callback_data='managing_courses_add')
         butt_edit = InlineKeyboardButton(dict_buttons['edit'], callback_data='managing_courses_edit')
-        butt_delete = InlineKeyboardButton(dict_buttons['delete'], callback_data='managing_courses_delete')
+        # butt_delete = InlineKeyboardButton(dict_buttons['delete'], callback_data='managing_courses_delete')
         butt_back = InlineKeyboardButton(get_text_but(user,'in_admin_menu'), callback_data='admin_in_admin_menu')
-        keyboard.add(butt_add, butt_edit, butt_delete, butt_back)
+        # keyboard.add(butt_add, butt_edit, butt_delete, butt_back)
+        keyboard.add(butt_edit, butt_back)
         return keyboard
 
 

@@ -40,17 +40,23 @@ class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
     username = Column(String)
+    chat_id = Column(Integer)
     mail = Column(String)
     phone = Column(String)
-    is_main_admin = Column(Boolean)
-    is_admin = Column(Boolean)
-    is_have_subscription = Column(Boolean)
-    is_kick = Column(Boolean)
-    ending_date = Column(DateTime)
+    is_main_admin = Column(Boolean, default=False)
+    is_admin = Column(Boolean, default=False)
+    is_have_subscription = Column(Boolean, default=False)
+    is_register = Column(Boolean, default=False)
     purchased_subscriptions = relationship("PurchasedSubscription", backref="users")
-    lng = Column(String)
-    balance = Column(Float, default=0.0)
+    lng = Column(String, default = "Russian")
     last_payload_timestamp = Column(Float)
     last_message_id_bot = Column(Integer)
+    course_id = Column(Integer)
+    subscribe_end = Column(Boolean, default=False)
 
-
+class Contact(Base):
+    __tablename__ = 'contacts'
+    id = Column(Integer, primary_key = True)
+    mail = Column(String)
+    phone = Column(String)
+    is_register = Column(Boolean, default = False)

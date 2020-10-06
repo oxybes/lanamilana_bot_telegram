@@ -13,3 +13,8 @@ class UserStateProfile(StatesGroup):
 class UserStateGetAccessCourse(StatesGroup):
     choose_course = State()
     choose_channels = State()
+
+class UserStateRegister(StatesGroup):
+    main_menu = State()
+    write_phone = State()
+    write_mail = State()

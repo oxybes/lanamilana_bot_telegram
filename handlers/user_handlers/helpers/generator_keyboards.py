@@ -26,7 +26,8 @@ class UserGeneratorKeyboard():
         """Генерирует клавиатуру для команды /start"""
         keyboard = InlineKeyboardMarkup()
         buttons = []
-
+        if (user.subscribe_end == True):
+            buttons.append(InlineKeyboardButton(get_text_but(user,'subscribe_continue_pay'), callback_data='subscribe_continue_pay'))
         for key, value in get_text_but(user, 'start_menu').items():
             but = InlineKeyboardButton(value, callback_data=f"start_menu_{key}")
             if (key == 'admin') and (not user.is_admin):
@@ -41,13 +42,23 @@ class UserGeneratorKeyboard():
 
 
     @staticmethod
+    def register_button(user: User) -> InlineKeyboardMarkup:
+        """Генерирует кнопки регистрации пользователя."""
+        keyboard = InlineKeyboardMarkup(row_width=1)
+        phone = InlineKeyboardButton(get_text_but(user, 'register_phone'), callback_data="register_phone")
+        mail = InlineKeyboardButton(get_text_but(user, 'register_mail'), callback_data="register_mail")
+        contact = InlineKeyboardButton(get_text_but(user, 'register_contact'), callback_data="register_contact", url=get_text_but(user, 'register_contact_url'))
+        keyboard.add(phone, mail, contact)
+        return keyboard
+
+    @staticmethod
     def main_menu_subscribe(user: User) -> InlineKeyboardMarkup:
         """Генерирует клавиатуру для выбора тарифа"""
         keyboard = InlineKeyboardMarkup()
 
         courses = DataBaseFunc.get_courses()
         for course in courses:
-            but = InlineKeyboardButton(text=f"{course.name} {course.time}д. {course.cost}р.", callback_data=f"main_menu_subscrube_{course.id}")
+            but = InlineKeyboardButton(text=f"{course.name}", callback_data=f"main_menu_subscrube_{course.id}")
             keyboard.add(but)
 
         keyboard.add(InlineKeyboardButton(text=get_text_but(user, "main_menu_back"), callback_data="main_menu_back"))

@@ -83,6 +83,8 @@ async def managing_users_main_menu_add_course_choose_user_add(callback: types.Ca
     user = DataBaseFunc.get_user(callback.from_user.id)
     course = DataBaseFunc.get_course(data['course_id'])
     DataBaseFunc.add_course_in_user(user, course)
+    user.subscribe_end = False
+    DataBaseFunc.commit()
     await callback.message.edit_text(get_text(user, 'managing_users_main_menu_add_course_choose_user_add'),  reply_markup=AdminGenerateKeyboard.admin_main_menu(user))
     await AdminStateMainMenu.admin_menu.set()
 

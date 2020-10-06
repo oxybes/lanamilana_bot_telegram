@@ -65,7 +65,8 @@ async def process_successful_payment(message: types.Message, state:FSMContext):
     data = await state.get_data()
     course = DataBaseFunc.get_course(data['last_course_id'])
     DataBaseFunc.add_course_in_user(user, course)
-
+    user.subscribe_end = False
+    DataBaseFunc.commit()
     await bot.send_message(
         message.chat.id,
         str(get_text(user, 'subscribe_menu_good_pay')).format(amount=course.cost,currency=message.successful_payment.currency, coursename=course.name))
@@ -73,3 +74,33 @@ async def process_successful_payment(message: types.Message, state:FSMContext):
     await UserStateMainMenu.main_menu.set()
 
     
+@dp.callback_query_handler(lambda callback: callback.data == "subscribe_continue_pay",state = '*')
+async def subscribe_continue_pay(callback : types.CallbackQuery, state : FSMContext):
+    """Продлить подписку после её окончания"""
+    await callback.answer()
+    user = DataBaseFunc.get_user(callback.from_user.id)
+    if (TOKEN_SHOP_YANDEX.split(':')[1] == "TEST"):
+        await callback.message.edit_text(text=get_text(user, 'subscribe_menu_test_payments'))
+    
+    course = DataBaseFunc.get_course(user.course_id)
+    timestamp = get_timestamp(user)
+
+    PRICE = types.LabeledPrice(label=course.name, amount=int(f"{course.cost}00"))
+
+    await state.update_data(last_course_id=user.course_id)
+
+    await bot.send_invoice(
+        callback.message.chat.id,
+        title = course.name,
+        description= course.description,
+        provider_token = TOKEN_SHOP_YANDEX,
+        currency = "rub",
+        is_flexible=False,
+        prices = [PRICE],
+        start_parameter = f"course_id_{course.id}",
+        payload = timestamp,
+        # reply_markup=UserGeneratorKeyboard.course_back_in_list(user)
+        # start_parameter = f"lol-lel-cheburek",
+        # payload = "test-payload-check"
+    )
+

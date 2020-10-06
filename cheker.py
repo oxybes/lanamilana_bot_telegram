@@ -1,12 +1,14 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 import json
 import requests
 from time import sleep
-from config import TOKEN, get_text, get_text_but
+from config import  get_text, get_text_but
 from datetime import datetime
 from database.function import DataBaseFunc
 
-url = "https://api.telegram.org/bot" + TOKEN + "/"
+url = "https://api.telegram.org/bot" + "1185185639:AAE6S_YhsM_FRs7F3xEnsZtqLDxWAbfhPso" + "/"
 
 def create_requets(methodType,methond, **data):
     if data != None:
@@ -50,14 +52,16 @@ def kick_user_from_channel(user, channel):
     send_message(user)
 
 
-all_users = DataBaseFunc.get_users_with_subscribe()
-users = [user for user in all_users if user.is_have_subscription]
-for user in users:
-    for ph in user.purchased_subscriptions:
-        for channel in ph.courses.channels:
-            try:
-                if ph.data_end < datetime.now():
-                    kick_user_from_channel(user, channel.channels) 
-            except:
-                continue
+user = DataBaseFunc.get_user("oxybes")
+send_message(user)
+# all_users = DataBaseFunc.get_users_with_subscribe()
+# users = [user for user in all_users if user.is_have_subscription]
+# for user in users:
+#     for ph in user.purchased_subscriptions:
+#         for channel in ph.courses.channels:
+#             try:
+#                 if ph.data_end < datetime.now():
+#                     kick_user_from_channel(user, channel.channels) 
+#             except:
+#                 continue
 

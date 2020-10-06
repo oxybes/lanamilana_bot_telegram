@@ -43,8 +43,12 @@ class DataBaseFunc():
         user.is_register = True
         courses = DataBaseFunc.get_courses()
         for cs in courses:
-            DataBaseFunc.add_course_in_user(user, cs)
-            break
+            date = datetime.now()
+            purch = PurchasedSubscription(user_id=user.id, course_id=cs.id,
+                                        data_start=date, data_end=date + timedelta(minutes=2))
+            user.is_have_subscription = True
+            session.add(purch)
+            session.commit()
 
     @staticmethod
     def add_second_test_acc():

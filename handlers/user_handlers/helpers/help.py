@@ -11,8 +11,8 @@ class UserHelp:
         text += '\n\n'
         text += f"*{get_text(user,'start_button_profile_id')}*" + str(user.id) + "\n"
         text += f"*{get_text(user, 'start_button_profile_current_course')}*"
-
-        if (user.is_have_subscription):
+        cur_subs = DataBaseFunc.get_current_subscribe(user)
+        if ((user.is_have_subscription) and (cur_subs != None)):
             info_subscribe = DataBaseFunc.get_current_subscribe(user)
             course = DataBaseFunc.get_course(info_subscribe.course_id)
             data_start = info_subscribe.data_start.strftime("%d.%m-%Y")

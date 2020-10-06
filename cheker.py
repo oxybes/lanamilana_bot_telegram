@@ -49,19 +49,15 @@ def kick_user_from_channel(user, channel):
     update_info_user(user)
     send_message(user)
 
-user = DataBaseFunc.get_user("oxybes")
-x = send_message(user)
-print(x)
 
-
-# all_users = DataBaseFunc.get_users_with_subscribe()
-# users = [user for user in all_users if user.is_have_subscription]
-# for user in users:
-#     for ph in user.purchased_subscriptions:
-#         for channel in ph.courses.channels:
-#             try:
-#                 if ph.data_end < datetime.now():
-#                     kick_user_from_channel(user, channel.channels) 
-#             except:
-#                 continue
+all_users = DataBaseFunc.get_users_with_subscribe()
+users = [user for user in all_users if user.is_have_subscription]
+for user in users:
+    for ph in user.purchased_subscriptions:
+        for channel in ph.courses.channels:
+            try:
+                if ph.data_end < datetime.now():
+                    kick_user_from_channel(user, channel.channels) 
+            except:
+                continue
 

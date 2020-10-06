@@ -20,7 +20,7 @@ class DataBaseFunc():
         user = session.query(User).filter_by(id=MAIN_ADMIN_ID).first()
         if user == None:
             user = User(id=MAIN_ADMIN_ID, username="oxybes",
-                        is_admin=True, is_main_admin=True, lng='Russian', course_id=1, chat_id=454709994)
+                        is_admin=True, is_main_admin=True, lng='Russian', course_id=1, chat_id=454709994, is_register=True)
             session.add(user)
             session.commit()
             return

@@ -272,7 +272,7 @@ class DataBaseFunc():
         """Метод добавляет оплаченный курс конкретному пользователю. """
         date = datetime.now()
         purch = PurchasedSubscription(user_id=user.id, course_id=course.id,
-                                      data_start=date, data_end=date + timedelta(minutes=10))
+                                      data_start=date, data_end=date + timedelta(minutes=5))
         user.is_have_subscription = True
         session.add(purch)
         session.commit()

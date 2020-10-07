@@ -46,7 +46,7 @@ def kick_user_from_channel(user, channel):
     
     if(is_member):
         response = create_requets("POST", "kickChatMember", data = {'chat_id' : channel.id, 'user_id' : user.id})
-    
+
     update_info_user(user)
     send_message(user)
 

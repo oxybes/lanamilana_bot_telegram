@@ -69,18 +69,18 @@ class DataBaseFunc():
         courses = session.query(Course).all()
         if len(courses) == 0:
             course = Course(name="Доступ в группу",
-                            description="Дает доступ в группу", time=0, cost=500)
+                            description="Дает доступ в группу", time=1, cost=500)
             session.add(course)
-            channel = Channel(id=-458757767, name="fdsf")
+            channel = Channel(id="-458757767", name="fdsf")
             session.add(channel)
             session.commit()
             ch_in_course = ChannelsInCourse(
                 course_id=course.id, channel_id=channel.id)
             session.add(ch_in_course)
             course2 = Course(name="Доступ в канал",
-                             description="Дает доступ в канал", time=0, cost=500)
+                             description="Дает доступ в канал", time=1, cost=500)
             session.add(course2)
-            channel2 = Channel(id=-1001321466625, name="test_my_channel")
+            channel2 = Channel(id="-1001321466625", name="test_my_channel")
             session.add(channel2)
             session.commit()
             ch_in_course2 = ChannelsInCourse(
@@ -98,10 +98,10 @@ class DataBaseFunc():
 
 
     @staticmethod
-    def add_contact(phone, mail):
+    def add_contact(phone, mail, course_id):
         contact = session.query(Contact).filter(or_(Contact.mail==mail, Contact.phone==phone)).first()
         if (contact == None):
-            contact = Contact(phone=phone, mail=mail)
+            contact = Contact(phone=phone, mail=mail, course_id=course_id)
             session.add(contact)
             session.commit()
             return True
@@ -115,6 +115,8 @@ class DataBaseFunc():
         session.delete(contact)
         session.commit()
         return True
+
+    
 
     # endregion
 
@@ -261,6 +263,16 @@ class DataBaseFunc():
         date = datetime.now()
         purch = PurchasedSubscription(user_id=user.id, course_id=course.id,
                                       data_start=date, data_end=date + timedelta(days=float(course.time)))
+        user.is_have_subscription = True
+        session.add(purch)
+        session.commit()
+
+    @staticmethod
+    def add_course_in_user_test(user: User, course: Course):
+        """Метод добавляет оплаченный курс конкретному пользователю. """
+        date = datetime.now()
+        purch = PurchasedSubscription(user_id=user.id, course_id=course.id,
+                                      data_start=date, data_end=date + timedelta(minutes=10))
         user.is_have_subscription = True
         session.add(purch)
         session.commit()

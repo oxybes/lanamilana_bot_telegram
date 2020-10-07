@@ -7,7 +7,10 @@ app = Flask(__name__)
 @app.route('/', methods=["POST"])
 def index():
     data = request.json
-    is_added = DataBaseFunc.add_contact(data['phone'], data['mail'])
+    phone = data['phone']
+    mail = data['mail']
+    course_id = data['course_id']
+    is_added = DataBaseFunc.add_contact(phone, mail, course_id)
     return str(is_added)
 
 @app.route('/delete', methods=["POST"])
@@ -16,8 +19,12 @@ def delete():
     is_delete = DataBaseFunc.delete_contact(data['phone'], data['mail'])
     return str(is_delete)
 
+@app.route('/test')
+def test():
+    return "Hello world"
+
 if __name__ == "__main__":
     if (os.name == "nt"):
         app.run(debug=True)
     else:
-        app.run("193.187.175.22", host="8080")
+        app.run(host="193.187.175.22", port="8080")

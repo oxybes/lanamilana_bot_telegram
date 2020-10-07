@@ -99,9 +99,12 @@ async def register_phone_write(message : types.Message, state : FSMContext):
     user.phone = phone
     user.mail = contact.mail
     user.is_register = True
+    user.course_id = contact.course_id
     contact.is_register = True
     DataBaseFunc.commit()
-
+    
+    ###### УБРАТЬ ТЕСТОВОЕ ДОБАВЛЕНИЕ КУРСОВ ######
+    DataBaseFunc.add_course_in_user_test(user, DataBaseFunc.get_course(user.course_id))
     await bot.edit_message_text(text=get_text(user, 'start'), chat_id=message.chat.id, message_id=message_id, reply_markup=UserGeneratorKeyboard.start_button(user))
     await UserStateMainMenu.main_menu.set()
     
@@ -137,8 +140,11 @@ async def register_mail_write(message : types.Message, state : FSMContext):
     user.phone = contact.phone
     user.is_register = True
     contact.is_register = True
+    user.course_id = contact.course_id
     DataBaseFunc.commit()
 
+    ###### УБРАТЬ ТЕСТОВОЕ ДОБАВЛЕНИЕ КУРСОВ ######
+    DataBaseFunc.add_course_in_user_test(user, DataBaseFunc.get_course(user.course_id))
     await bot.edit_message_text(text=get_text(user, 'start'), chat_id=message.chat.id, message_id=message_id, reply_markup=UserGeneratorKeyboard.start_button(user))
     await UserStateMainMenu.main_menu.set()
 

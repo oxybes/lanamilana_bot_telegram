@@ -16,7 +16,7 @@ class ChannelsInCourse(Base):
     __tablename__ = 'channels_in_courses'
     id = Column(Integer, primary_key=True)
     course_id = Column(Integer, ForeignKey('courses.id'))
-    channel_id = Column(Integer, ForeignKey('channels.id'))
+    channel_id = Column(String, ForeignKey('channels.id'))
 
 class Course(Base):
     __tablename__ = 'courses'
@@ -31,7 +31,7 @@ class Course(Base):
 
 class Channel(Base):
     __tablename__ = 'channels'
-    id = Column(Integer, primary_key=True)
+    id = Column(String, primary_key=True)
     name = Column(String)
     link = Column(String)
     courses = relationship("ChannelsInCourse", backref="channels")
@@ -53,10 +53,12 @@ class User(Base):
     last_message_id_bot = Column(Integer)
     course_id = Column(Integer)
     subscribe_end = Column(Boolean, default=False)
+    notification_off = Column(Boolean, default=False)
 
 class Contact(Base):
     __tablename__ = 'contacts'
     id = Column(Integer, primary_key = True)
     mail = Column(String)
     phone = Column(String)
+    course_id = Column(Integer)
     is_register = Column(Boolean, default = False)

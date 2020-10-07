@@ -68,13 +68,12 @@ async def process_successful_payment(message: types.Message, state:FSMContext):
     user.subscribe_end = False
     DataBaseFunc.commit()
     
-    for ph in user.purchased_subscriptions:
-        for channel in ph.courses.channels:
-            try:
-                await bot.unban_chat_member(chat_id=channel.id, user_id = user.id)
-            except:
-                continue
 
+    for channel in course.channels:
+        try:
+            await bot.unban_chat_member(chat_id=channel.channels.id, user_id = user.id)
+        except:
+            continue
 
     await bot.send_message(
         message.chat.id,

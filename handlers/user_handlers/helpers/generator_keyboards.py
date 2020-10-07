@@ -120,7 +120,8 @@ class UserGeneratorKeyboard():
                     channels.append(channel.channels)
       
         for channel in channels:
-            await DataBaseFunc.create_link_invoice(channel)
+            if channel.link == None:
+                await DataBaseFunc.create_link_invoice(channel)
             buttons.append(InlineKeyboardButton(channel.name, callback_data=f"access_menu_get_channels_{channel.id}", url=channel.link))
 
         keyboard.add(*buttons)

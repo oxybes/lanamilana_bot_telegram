@@ -61,4 +61,3 @@ for user in users:
                     kick_user_from_channel(user, channel.channels) 
             except:
                 continue
-

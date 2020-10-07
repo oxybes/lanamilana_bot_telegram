@@ -1,15 +1,21 @@
 import os
 import json
 
-TOKEN = os.getenv("TOKEN")
-MAIN_ADMIN_ID = os.getenv("MAIN_ADMIN_ID")
-CHANNEL_ID = os.getenv("CHANNEL_ID")
-GROUP_ID = os.getenv("GROUP_ID")
-TOKEN_SHOP_YANDEX = os.getenv("TOKEN_SHOP_YANDEX")
+
+TOKEN="1185185639:AAE6S_YhsM_FRs7F3xEnsZtqLDxWAbfhPso"
+MAIN_ADMIN_ID=454709994
+TOKEN_SHOP_YANDEX="381764678:TEST:19489"
+
+if (os.name == "nt"):
+    textsFilename = "texts//text.json"
+    texts_but_filename = "texts//text_button.json"
+else:
+    textsFilename = "//root//lanamilana_bot_telegram//texts//text.json"
+    texts_but_filename = "//root//lanamilana_bot_telegram//texts//text_button.json"
 
 TEXTS = {}
 
-with open('texts//text.json', 'r', encoding='utf8') as file:
+with open(textsFilename, 'r', encoding='utf8') as file:
     TEXTS = json.load(file)
 
 def get_text(user, text):
@@ -17,7 +23,7 @@ def get_text(user, text):
 
 
 TEXTS_BUTTON = {}
-with open('texts//text_button.json', 'r', encoding='utf8') as file:
+with open(texts_but_filename, 'r', encoding='utf8') as file:
     TEXTS_BUTTON = json.load(file)
 
 def get_text_but(user, text):

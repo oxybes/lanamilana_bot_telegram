@@ -96,6 +96,26 @@ class DataBaseFunc():
             session.add(contact)
             session.commit()
 
+
+    @staticmethod
+    def add_contact(phone, mail):
+        contact = session.query(Contact).filter(or_(Contact.mail==mail, Contact.phone==phone)).first()
+        if (contact == None):
+            contact = Contact(phone=phone, mail=mail)
+            session.add(contact)
+            session.commit()
+            return True
+        return False
+
+    @staticmethod
+    def delete_contact(phone, mail):
+        contact = session.query(Contact).filter(or_(Contact.mail==mail, Contact.phone==phone)).first()
+        if (contact == None):
+            return False
+        session.delete(contact)
+        session.commit()
+        return True
+
     # endregion
 
     # region Работа с классом Course

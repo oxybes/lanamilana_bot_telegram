@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3.8
 # -*- coding: utf-8 -*-
 
 import handlers

@@ -54,10 +54,19 @@ def kick_user_from_channel(user, channel):
 all_users = DataBaseFunc.get_users_with_subscribe()
 users = [user for user in all_users if user.is_have_subscription]
 for user in users:
-    for ph in user.purchased_subscriptions:
+    try:
+        ph = user.purchased_subscriptions[-1]
         for channel in ph.courses.channels:
             try:
+                if (ph.is_check):
+                    if(user.notification_off == False):
+                        send_message(user)
+                    continue
                 if ph.data_end < datetime.now():
                     kick_user_from_channel(user, channel.channels) 
+                    ph.is_check = True
+                    DataBaseFunc.commit()
             except:
                 continue
+    except:
+        continue

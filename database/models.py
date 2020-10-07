@@ -11,6 +11,7 @@ class PurchasedSubscription(Base):
     course_id = Column(Integer, ForeignKey('courses.id'))
     data_start = Column(DateTime)
     data_end = Column(DateTime)
+    is_check = Column(Boolean, default = False)
 
 class ChannelsInCourse(Base):
     __tablename__ = 'channels_in_courses'

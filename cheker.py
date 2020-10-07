@@ -4,7 +4,6 @@
 import json
 import requests
 from time import sleep
-from config import  get_text, get_text_but
 from datetime import datetime
 from database.function import DataBaseFunc
 
@@ -26,8 +25,8 @@ def update_info_user(user):
         DataBaseFunc.commit()
     
 def send_message(user):
-    text = get_text(user, 'subscription_ended')
-    text_button = get_text_but(user, 'subscribe_continue_pay')
+    text = "У вас кончилась подписка, пожалуйста, продлите её, чтобы иметь доступ к каналам."
+    text_button = "Продлить подписку"
     keyboard = json.dumps(
                            {"inline_keyboard": [[{"text": "Продлить подписку", "callback_data": "subscribe_continue_pay"}]]}
                          )

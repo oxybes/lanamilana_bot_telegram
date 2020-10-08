@@ -25,6 +25,7 @@ def testhook():
     data = request.json
     with open("//root//testhook.json", 'w', encoding='utf8') as file:
         json.dump(data, file)
+    return "ok"
 
 @app.route('/test')
 def test():

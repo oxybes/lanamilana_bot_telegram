@@ -38,11 +38,6 @@ def testhook():
         id_tariff = 2
     else:
         id_tariff = 3
-
-    print(f"Phone = {phone}")
-    print(f"Email = {mail}")
-    print(f"Tariff_id = {id_tariff}")
-
     DataBaseFunc.add_contact(phone, mail, id_tariff)
 
 

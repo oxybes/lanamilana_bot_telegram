@@ -31,7 +31,7 @@ def testhook():
     data = json.loads(payment)
     product = data['products'][-1]
     pattern = r'Тариф:(.*)'
-    result = re.search(pattern, test).group(0)[:-3]
+    result = re.search(pattern, product).group(0)[:-3]
     if (result == "Тариф: Базовый тест"):
         id_tariff = 1
     elif (result == "Тариф: Всё, что нужно тест"):

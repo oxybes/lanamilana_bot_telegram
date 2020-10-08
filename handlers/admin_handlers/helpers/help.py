@@ -56,7 +56,13 @@ class AdminHelper():
     def get_user_from_message(message : types.Message):
         """Возвращает пользователя из сообщения администратора"""
         if (message.forward_from):
-            return DataBaseFunc.get_user(message.from_user.id)
+            user = DataBaseFunc.get_user(message.forward_from.id)
+            if (user == None):
+                user = User(id=message.forward_from.id, username=message.forward_from.username, is_register = True, lng = "Russian")
+                DataBaseFunc.add(user)
+            return user
+            
+
         else:
             return DataBaseFunc.get_user(message.text)
             
@@ -150,3 +156,7 @@ class AdminHelper():
             text += "• " +admin.username + "\n"
         text = text[:-1]
         return text
+
+    @staticmethod
+    def get_whos(user):
+        text = ""

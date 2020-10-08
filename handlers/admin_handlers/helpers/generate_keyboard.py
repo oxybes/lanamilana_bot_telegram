@@ -14,6 +14,7 @@ class AdminGenerateKeyboard():
         butt_managing_courses = InlineKeyboardButton(text=ls_dict_buttons['managing_courses'], callback_data='admin_menu_managing_courses')
         butt_managing_users = InlineKeyboardButton(ls_dict_buttons['managing_users'], callback_data='admin_menu_managing_users')
         butt_managing_admins = InlineKeyboardButton(ls_dict_buttons['managing_admins'], callback_data='admin_menu_managing_admins')
+        butt_who_used = InlineKeyboardButton(ls_dict_buttons['whos'], callback_data='admin_menu_whos')
         # butt_generate_new_link = InlineKeyboardButton(ls_dict_buttons['generate_new_link'], callback_data='admin_menu_generate_new_link')
         # butt_spam = InlineKeyboardButton(ls_dict_buttons['spam'], callback_data='admin_menu_spam')
         butt_back = InlineKeyboardButton(ls_dict_buttons['back'], callback_data='admin_menu_back')

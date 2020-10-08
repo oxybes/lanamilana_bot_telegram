@@ -48,25 +48,19 @@ def kick_user_from_channel(user, channel):
         response = create_requets("POST", "kickChatMember", data = {'chat_id' : channel.id, 'user_id' : user.id})
 
     update_info_user(user)
-    send_message(user)
+    
 
 
 all_users = DataBaseFunc.get_users_with_subscribe()
 users = [user for user in all_users if user.is_have_subscription]
 for user in users:
-    try:
-        ph = user.purchased_subscriptions[-1]
+    for ph in [subs for subs in user.purchased_subscriptions if subs.is_check == False]:
         for channel in ph.courses.channels:
             try:
-                if (ph.is_check):
-                    if(user.notification_off == False):
-                        send_message(user)
-                    continue
                 if ph.data_end < datetime.now():
                     kick_user_from_channel(user, channel.channels) 
                     ph.is_check = True
                     DataBaseFunc.commit()
             except:
                 continue
-    except:
-        continue
+        send_message(user)

@@ -38,6 +38,15 @@ async def admin_main_menu_managing_users(callback: types.CallbackQuery):
     await callback.message.edit_text(get_text(user, 'admin_menu_managing_users'), reply_markup=AdminGenerateKeyboard.admin_menu_managing_users(user))
     await AdminStateManagingUser.main_menu.set()
 
+@dp.callback_query_handler(lambda callback: callback.data == "admin_menu_whos", state=AdminStateMainMenu.admin_menu)
+async def admin_main_menu_managing_users(callback: types.CallbackQuery):
+    """Отправляет меню управления пользователями"""
+    await callback.answer()
+    user = DataBaseFunc.get_user(callback.from_user.id)
+    await callback.message.edit_text(get_text(user, 'admin_menu_managing_users'), reply_markup=AdminGenerateKeyboard.admin_menu_managing_users(user))
+    await AdminStateManagingUser.main_menu.set()
+
+
 
 @dp.callback_query_handler(lambda callback: callback.data == "admin_in_admin_menu", state='*')
 async def admin_in_admnin_menu(callback: types.CallbackQuery):

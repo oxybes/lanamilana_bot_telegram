@@ -1,4 +1,5 @@
 import os
+import json
 from flask import Flask, request
 from database.function import DataBaseFunc
 
@@ -18,6 +19,12 @@ def delete():
     data = request.json
     is_delete = DataBaseFunc.delete_contact(data['phone'], data['mail'])
     return str(is_delete)
+
+@app.route('/testhook', methods=["POST"])
+def testhook():
+    data = request.json
+    with open("//root//testhook.json", 'w', encoding='utf8') as file:
+        json.dump(data, file)
 
 @app.route('/test')
 def test():

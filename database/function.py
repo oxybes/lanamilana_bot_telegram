@@ -1,4 +1,6 @@
 from datetime import datetime, timedelta
+
+from requests.api import delete
 from .models import User, Course, PurchasedSubscription, Channel, ChannelsInCourse, Contact
 from config import MAIN_ADMIN_ID
 from .mics import session, metadata, engine
@@ -264,6 +266,7 @@ class DataBaseFunc():
         purch = PurchasedSubscription(user_id=user.id, course_id=course.id,
                                       data_start=date, data_end=date + timedelta(days=float(course.time)))
         user.is_have_subscription = True
+        user.course_id = course.id
         session.add(purch)
         session.commit()
 
@@ -278,7 +281,7 @@ class DataBaseFunc():
         session.commit()
 
     @staticmethod
-    def delete_course_from_user(user: User, course: Course):
+    async def delete_course_from_user(user: User, course: Course):
         """Удаляет курс у пользователя"""
         date = datetime.now()
         purch = [ph for ph in user.purchased_subscriptions if (
@@ -286,6 +289,8 @@ class DataBaseFunc():
         if len(purch) != 0:
             purch[-1].data_end = date
             session.commit()
+
+        DataBaseFunc.delete_user_in_channels_from_course(user, course)
 
         actualy_subs = [
             ph for ph in user.purchased_subscriptions if ph.data_end > datetime.now()]
@@ -311,8 +316,19 @@ class DataBaseFunc():
             purch[-1].data_end += timedelta(days=time)
             session.commit()
 
+
     @staticmethod
-    def delete_time_in_course(user: User, course: Course, time: int) -> None:
+    async def delete_user_in_channels_from_course(user : User, course : Course):
+        for channel in course.channels:
+            try:
+                if (await bot.get_chat_member(channel.channels.id, user.id)):
+                    await bot.kick_chat_member(channel.channels.id, user.id)
+                    await bot.unban_chat_member(channel.channels.id, bot.id)
+            except:
+                pass
+
+    @staticmethod
+    async def delete_time_in_course(user: User, course: Course, time: int) -> None:
         """Убавляет время в курсе пользователю
 
         Args:
@@ -325,6 +341,8 @@ class DataBaseFunc():
             ph.courses.id == course.id) and (ph.data_end > date)]
         if len(purch) != 0:
             purch[-1].data_end -= timedelta(days=time)
+            if (purch[-1].data_end < datetime.now()):
+                await DataBaseFunc.delete_user_in_channels_from_course(user, course)
             session.commit()
             activs = DataBaseFunc.get_user_subscribes(user)
             if (len(activs) == 0):
@@ -332,11 +350,16 @@ class DataBaseFunc():
                 user.subscribe_end = True
                 session.commit()
 
+
+
     @staticmethod
     def get_current_subscribe(user: User) -> PurchasedSubscription:
         """Метод возвращает текущую активную подписку пользователя."""
-        purh = session.query(PurchasedSubscription).filter_by(
-            user_id=user.id).all()[-1]
+        purhs = session.query(PurchasedSubscription).filter_by(
+            user_id=user.id).all()
+        if (len(purhs) == 0):
+            return None
+        purh = purhs[-1]
         if purh.data_end > datetime.now():
             return purh
         return None

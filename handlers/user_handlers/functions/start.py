@@ -26,13 +26,17 @@ async def start_message(message: types.Message):
         info_mes = await message.answer(get_text(user, 'register'), reply_markup=UserGeneratorKeyboard.register_button(user))
         user.last_message_id_bot = info_mes.message_id
         await UserStateRegister.main_menu.set()
-
+    
     elif user.is_register == False:
+        if (user.chat_id == None):
+            user.chat_id = message.chat.id
         info_mes = await message.answer(get_text(user, 'register'), reply_markup=UserGeneratorKeyboard.register_button(user))
         user.last_message_id_bot = info_mes.message_id
         await UserStateRegister.main_menu.set()
 
     else:
+        if (user.chat_id == None):
+            user.chat_id = message.chat.id
         if user.last_message_id_bot:
             await bot.delete_message(chat_id=message.chat.id, message_id=user.last_message_id_bot)
         await message.answer(get_text(user,'start'), reply_markup=UserGeneratorKeyboard.start_button(user))

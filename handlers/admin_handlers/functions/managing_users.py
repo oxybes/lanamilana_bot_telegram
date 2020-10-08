@@ -64,8 +64,12 @@ async def managing_users_main_menu_add_course_choose_user(message: types.Message
     user = DataBaseFunc.get_user(int(message.from_user.id))
     user_message = AdminHelper.get_user_from_message(message)
     data = await state.get_data()
+    
     if (user_message):
         await message.delete()
+        if (user_message.is_have_subscription):
+            await bot.edit_message_text(chat_id=message.chat.id, message_id=data['message_id'], text=get_text(user, 'managing_users_mein_menu_add_course_choose_user_is_have'), reply_markup=AdminGenerateKeyboard.admin_menu_managing_users_add_course(user))
+            return
         data = await state.get_data()
         await state.update_data(user_add_course_id = user_message.id)
         await bot.edit_message_text(chat_id=message.chat.id, message_id=data['message_id'], text=get_text(user, 'managing_users_main_menu_add_course'), reply_markup=AdminGenerateKeyboard.managing_user_add_course(user, user_message))
@@ -81,9 +85,11 @@ async def managing_users_main_menu_add_course_choose_user_add(callback: types.Ca
     await callback.answer()
     data = await state.get_data()
     user = DataBaseFunc.get_user(callback.from_user.id)
+    user_add = DataBaseFunc.get_user(data['user_add_course_id'])
     course = DataBaseFunc.get_course(data['course_id'])
-    DataBaseFunc.add_course_in_user(user, course)
+    DataBaseFunc.add_course_in_user(user_add, course)
     user.subscribe_end = False
+    user.is_register = True
     DataBaseFunc.commit()
     await callback.message.edit_text(get_text(user, 'managing_users_main_menu_add_course_choose_user_add'),  reply_markup=AdminGenerateKeyboard.admin_main_menu(user))
     await AdminStateMainMenu.admin_menu.set()
@@ -170,7 +176,7 @@ async def managing_users_delete_course_final_add(callback: types.CallbackQuery, 
     data = await state.get_data()
     delete_user = DataBaseFunc.get_user(data['user_delete_id'])
     course = DataBaseFunc.get_course(data['course_id'])
-    DataBaseFunc.delete_course_from_user(delete_user, course)
+    await DataBaseFunc.delete_course_from_user(delete_user, course)
     await callback.message.edit_text(get_text(user, 'managing_users_delete_course_final_add').format(course=course.name, username=delete_user.username), reply_markup=AdminGenerateKeyboard.admin_main_menu(user))
     await AdminStateMainMenu.admin_menu.set()
 
@@ -359,7 +365,7 @@ async def managing_users_delete_time_choose_time_back(callback: types.CallbackQu
 
 @dp.callback_query_handler(lambda callback: callback.data == "managing_users_main_menu_delete_time", state=AdminStateManagingUser.main_menu)
 async def managing_users_main_menu_delete_time(callback: types.CallbackQuery, state: FSMContext):
-    """Обработка кнопки добавить время из админ панели менеджера пользователей. """
+    """Обработка кнопки убавить время из админ панели менеджера пользователей. """
     await callback.answer()
     user = DataBaseFunc.get_user(callback.from_user.id)
     await state.update_data(message_id=callback.message.message_id)
@@ -374,9 +380,9 @@ async def managin_users_main_menu_delete_course_choose_user(message: types.Messa
     user_message = AdminHelper.get_user_from_message(message)
     data = await state.get_data()
     if (user_message):
-        await state.update_data(user_addtime_id=user_message.id)
+        await state.update_data(user_deletetime_id=user_message.id)
         await message.delete()
-        await bot.edit_message_text(chat_id=message.chat.id, message_id=data['message_id'], text=get_text(user, 'managing_users_delete_time_choose_courses'), reply_markup=AdminGenerateKeyboard.managing_users_add_time_choose_course(user))
+        await bot.edit_message_text(chat_id=message.chat.id, message_id=data['message_id'], text=get_text(user, 'managing_users_delete_time_choose_courses'), reply_markup=AdminGenerateKeyboard.managing_users_add_time_choose_course(user_message))
         await AdminStateManagingUser.delete_time_choose_course.set()
     else:
         await message.delete()
@@ -385,7 +391,7 @@ async def managin_users_main_menu_delete_course_choose_user(message: types.Messa
 
 @dp.callback_query_handler(state=AdminStateManagingUser.delete_time_choose_course)
 async def managing_users_delete_time_choose_course(callback: types.CallbackQuery, state: FSMContext):
-    """Выбор курса для добавления ему времени"""
+    """Выбор курса для убавления ему времени"""
     await callback.answer()
     user = DataBaseFunc.get_user(callback.from_user.id)
     course_id = int(callback.data[38:])
@@ -403,7 +409,7 @@ async def managing_user_add_time_write_time(message: types.Message, state: FSMCo
         time = int(message.text)
         await state.update_data(time=time)
         await message.delete()
-        user_addtime = DataBaseFunc.get_user(data['user_addtime_id'])
+        user_addtime = DataBaseFunc.get_user(data['user_deletetime_id'])
         await bot.edit_message_text(text=AdminHelper.get_text_managing_users_delete_time_final(user_addtime, data['course_id'], time),
                                     chat_id=message.chat.id, message_id=data['message_id'],
                                     reply_markup=AdminGenerateKeyboard.managing_users_add_time_final(user))
@@ -422,10 +428,10 @@ async def managing_users_delete_time_final_add(callback: types.CallbackQuery, st
     await callback.answer()
     data = await state.get_data()
     user = DataBaseFunc.get_user(callback.from_user.id)
-    user_addtime = DataBaseFunc.get_user(data['user_addtime_id'])
+    user_deletetime_id = DataBaseFunc.get_user(data['user_deletetime_id'])
     course = DataBaseFunc.get_course(data['course_id'])
     time = data['time']
-    DataBaseFunc.delete_time_in_course(user_addtime, course, time)
+    await DataBaseFunc.delete_time_in_course(user_deletetime_id, course, time)
     await callback.message.edit_text(get_text(user, 'managing_users_delete_time_final_add'), reply_markup=AdminGenerateKeyboard.admin_menu_managing_users(user))
     await AdminStateManagingUser.main_menu.set()
 

@@ -23,6 +23,7 @@ async def start_menu_get_access(callback : types.CallbackQuery):
     keyboard = await UserGeneratorKeyboard.get_user_channels(user)
 
     await callback.message.edit_text(text= text, reply_markup=keyboard)
+    await DataBaseFunc.delete_messages_from_callback(user, callback.message.message_id)
     await UserStateGetAccessCourse.choose_course.set()
 
 @dp.callback_query_handler(lambda callback: callback.data == "access_menu_get_course_back", state ='*')

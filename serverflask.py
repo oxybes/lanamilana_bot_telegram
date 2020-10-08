@@ -24,12 +24,27 @@ def delete():
 
 @app.route('/testhook', methods=["POST"])
 def testhook():
-    data = request.json
-    header = request.headers
-    args = request.args
-    print(args)
-    print(header)
-    return "ok"
+    form = request.form
+    phone = "".join(ch for ch in form['Phone'] if  ch.isdigit())
+    mail = form['Email']
+    payment = form['payment']
+    data = json.loads(payment)
+    product = data['products'][-1]
+    pattern = r'Тариф:(.*)'
+    result = re.search(pattern, test).group(0)[:-3]
+    if (result == "Тариф: Базовый тест"):
+        id_tariff = 1
+    elif (result == "Тариф: Всё, что нужно тест"):
+        id_tariff = 2
+    else:
+        id_tariff = 3
+
+    print(f"Phone = {phone}")
+    print(f"Email = {mail}")
+    print(f"Tariff_id = {id_tariff}")
+
+    DataBaseFunc.add_contact(phone, mail, id_tariff)
+
 
 @app.route('/test')
 def test():

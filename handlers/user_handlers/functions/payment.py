@@ -1,10 +1,12 @@
 import datetime
+
+from aiogram.types import message
 from database.function import DataBaseFunc
-from database.models import User
+from database.models import User, Message
 from misc import dp, bot
 from aiogram import types
 from aiogram.dispatcher import FSMContext
-from config import get_text, TEXTS, TOKEN_SHOP_YANDEX
+from config import get_text, TOKEN_SHOP_YANDEX
 from handlers.user_handlers.helpers.generator_keyboards import UserGeneratorKeyboard
 from handlers.user_handlers.helpers.help import UserHelp
 from handlers.user_handlers.helpers.user_state import UserStateMainMenu
@@ -14,12 +16,10 @@ def save_timestamp_in_user(user:User, timestamp:float) -> None:
     user.last_payload_timestamp = timestamp
     DataBaseFunc.commit()
 
-
 def get_timestamp(user: User) -> float:
     timestamp = datetime.datetime.now().timestamp()
     save_timestamp_in_user(user, timestamp)
     return timestamp
-
 
 @dp.callback_query_handler(state=UserStateMainMenu.get_subscribe)
 async def subscribe_menu_choose_course(callback:types.CallbackQuery, state: FSMContext):
@@ -51,19 +51,16 @@ async def subscribe_menu_choose_course(callback:types.CallbackQuery, state: FSMC
         # payload = "test-payload-check"
     )
 
-
 @dp.pre_checkout_query_handler(state='*')
 async def process_pre_checkout_query(pre_checkout_query: types.PreCheckoutQuery):
     await bot.answer_pre_checkout_query(pre_checkout_query.id, ok=True)
-
-
 
 @dp.message_handler(state = '*', content_types=types.ContentTypes.SUCCESSFUL_PAYMENT)
 async def process_successful_payment(message: types.Message, state:FSMContext):
     user = DataBaseFunc.get_user(message.from_user.id)
 
     data = await state.get_data()
-    course = DataBaseFunc.get_course(data['last_course_id'])
+    course = DataBaseFunc.get_course(user.course_id)
     DataBaseFunc.add_course_in_user(user, course)
     user.subscribe_end = False
     DataBaseFunc.commit()
@@ -75,13 +72,17 @@ async def process_successful_payment(message: types.Message, state:FSMContext):
         except:
             continue
 
-    await bot.send_message(
+    mess = await bot.send_message(
         message.chat.id,
         str(get_text(user, 'subscribe_menu_good_pay')).format(amount=course.cost,currency=message.successful_payment.currency, coursename=course.name))
-    await bot.send_message(message.chat.id, get_text(user, 'start'), reply_markup=UserGeneratorKeyboard.start_button(user))
+    mess2 = await bot.send_message(message.chat.id, get_text(user, 'start'), reply_markup=UserGeneratorKeyboard.start_button(user))
+    await DataBaseFunc.delete_messages(user)
+    ms = Message(user_id=user.id, message_id=mess.message_id)
+    ms2 = Message(user_id=user.id, message_id=mess2.message_id)
+    DataBaseFunc.add(ms)
+    DataBaseFunc.add(ms2)
     await UserStateMainMenu.main_menu.set()
-
-    
+   
 @dp.callback_query_handler(lambda callback: callback.data == "subscribe_continue_pay",state = '*')
 async def subscribe_continue_pay(callback : types.CallbackQuery, state : FSMContext):
     """Продлить подписку после её окончания"""
@@ -97,7 +98,7 @@ async def subscribe_continue_pay(callback : types.CallbackQuery, state : FSMCont
 
     await state.update_data(last_course_id=user.course_id)
 
-    await bot.send_invoice(
+    mess = await bot.send_invoice(
         callback.message.chat.id,
         title = course.name,
         description= course.description,
@@ -111,4 +112,8 @@ async def subscribe_continue_pay(callback : types.CallbackQuery, state : FSMCont
         # start_parameter = f"lol-lel-cheburek",
         # payload = "test-payload-check"
     )
+    await DataBaseFunc.delete_messages(user)
+    ms = Message(user_id=user.id, message_id=mess.message_id)
+    DataBaseFunc.add(ms)
+
 

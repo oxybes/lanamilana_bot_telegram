@@ -37,6 +37,12 @@ class Channel(Base):
     link = Column(String)
     courses = relationship("ChannelsInCourse", backref="channels")
 
+class Message(Base):
+    __tablename__ = 'messages'
+    id = Column(Integer, primary_key = True)
+    message_id = Column(Integer)
+    user_id = Column(Integer, ForeignKey('users.id'))
+
 class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
@@ -44,14 +50,12 @@ class User(Base):
     chat_id = Column(Integer)
     mail = Column(String)
     phone = Column(String)
-    is_main_admin = Column(Boolean, default=False)
     is_admin = Column(Boolean, default=False)
     is_have_subscription = Column(Boolean, default=False)
     is_register = Column(Boolean, default=False)
+    messages_for_delete = relationship("Message", backref="messages_for_delete")
     purchased_subscriptions = relationship("PurchasedSubscription", backref="users")
     lng = Column(String, default = "Russian")
-    last_payload_timestamp = Column(Float)
-    last_message_id_bot = Column(Integer)
     course_id = Column(Integer)
     subscribe_end = Column(Boolean, default=False)
     notification_off = Column(Boolean, default=False)

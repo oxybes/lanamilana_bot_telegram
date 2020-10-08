@@ -1,7 +1,7 @@
 import re
 from sqlalchemy.orm import session
 from database.function import DataBaseFunc
-from database.models import Contact, User
+from database.models import Contact, User, Message
 from misc import dp, bot
 from aiogram import types
 from aiogram.dispatcher import FSMContext
@@ -15,31 +15,41 @@ from handlers.admin_handlers.helpers.generate_keyboard import AdminGenerateKeybo
 @dp.message_handler(commands = ['start'], state = '*')
 async def start_message(message: types.Message):
     """Обработчик команды /start."""
-
     user = DataBaseFunc.get_user(message.from_user.id)
+    
+    if user != None:
+        if (user.chat_id != message.chat.id):
+            user.chat_id = message.chat.id
+            DataBaseFunc.commit()
+    
     await message.delete()
 
     if user == None:
         user = User(id = message.from_user.id, username=message.from_user.username, chat_id=message.chat.id)
         DataBaseFunc.add(user)
         DataBaseFunc.commit()
-        info_mes = await message.answer(get_text(user, 'register'), reply_markup=UserGeneratorKeyboard.register_button(user))
-        user.last_message_id_bot = info_mes.message_id
+        mess = await message.answer(get_text(user, 'register'), reply_markup=UserGeneratorKeyboard.register_button(user))
+        await DataBaseFunc.delete_messages(user)
+        ms = Message(user_id=user.id, message_id = mess.message_id)
+        DataBaseFunc.add(ms)
         await UserStateRegister.main_menu.set()
     
     elif user.is_register == False:
         if (user.chat_id == None):
             user.chat_id = message.chat.id
-        info_mes = await message.answer(get_text(user, 'register'), reply_markup=UserGeneratorKeyboard.register_button(user))
-        user.last_message_id_bot = info_mes.message_id
+        mess = await message.answer(get_text(user, 'register'), reply_markup=UserGeneratorKeyboard.register_button(user))
+        await DataBaseFunc.delete_messages(user)
+        ms = Message(user_id=user.id, message_id = mess.message_id)
+        DataBaseFunc.add(ms)
         await UserStateRegister.main_menu.set()
 
     else:
         if (user.chat_id == None):
             user.chat_id = message.chat.id
-        if user.last_message_id_bot:
-            await bot.delete_message(chat_id=message.chat.id, message_id=user.last_message_id_bot)
-        await message.answer(get_text(user,'start'), reply_markup=UserGeneratorKeyboard.start_button(user))
+        mess = await message.answer(get_text(user,'start'), reply_markup=UserGeneratorKeyboard.start_button(user))
+        await DataBaseFunc.delete_messages(user)
+        ms = Message(user_id=user.id, message_id = mess.message_id)
+        DataBaseFunc.add(ms)
         await UserStateMainMenu.main_menu.set()
 
 
@@ -83,21 +93,25 @@ async def register_phone_write(message : types.Message, state : FSMContext):
     message_id = data['callback_message_id']
     phone = "".join(ch for ch in message.text if  ch.isdigit())
     errors = get_text(user, 'write_phone_errors')
-    keyboard = types.InlineKeyboardMarkup()
-    keyboard.add(types.InlineKeyboardButton(get_text_but(user, 'register_write_back'), callback_data="register_write_back"))
+    keyboard = UserGeneratorKeyboard.register_button(user)
+    # keyboard = types.InlineKeyboardMarkup()
+    # keyboard.add(types.InlineKeyboardButton(get_text_but(user, 'register_write_back'), callback_data="register_write_back"))
     
     if len(phone) == 0:
         await bot.edit_message_text(text=errors['empty'], chat_id=message.chat.id, message_id=message_id, reply_markup=keyboard)
+        await UserStateRegister.main_menu.set()
         return
 
     check_user = DataBaseFunc.get_user_for_phone(phone)
     if (check_user != None):
         await bot.edit_message_text(text=errors['is_register'], chat_id=message.chat.id, message_id=message_id, reply_markup=keyboard)
+        await UserStateRegister.main_menu.set()
         return
 
     contact = DataBaseFunc.get_contact(phone=phone)
     if (contact == None):
         await bot.edit_message_text(text=errors['not_found'], chat_id=message.chat.id, message_id=message_id, reply_markup=keyboard)
+        await UserStateRegister.main_menu.set()
         return
     
     user.phone = phone
@@ -107,8 +121,8 @@ async def register_phone_write(message : types.Message, state : FSMContext):
     contact.is_register = True
     DataBaseFunc.commit()
     
-    ###### УБРАТЬ ТЕСТОВОЕ ДОБАВЛЕНИЕ КУРСОВ ######
-    DataBaseFunc.add_course_in_user_test(user, DataBaseFunc.get_course(user.course_id))
+
+    DataBaseFunc.add_course_in_user(user, DataBaseFunc.get_course(user.course_id))
     await bot.edit_message_text(text=get_text(user, 'start'), chat_id=message.chat.id, message_id=message_id, reply_markup=UserGeneratorKeyboard.start_button(user))
     await UserStateMainMenu.main_menu.set()
     
@@ -123,21 +137,25 @@ async def register_mail_write(message : types.Message, state : FSMContext):
     message_id = data['callback_message_id']
     mail = message.text
     errors = get_text(user, 'write_mail_errors')
-    keyboard = types.InlineKeyboardMarkup()
-    keyboard.add(types.InlineKeyboardButton(get_text_but(user, 'register_write_back'), callback_data="register_write_back"))
+    keyboard = UserGeneratorKeyboard.register_button(user)
+    # keyboard = types.InlineKeyboardMarkup()
+    # keyboard.add(types.InlineKeyboardButton(get_text_but(user, 'register_write_back'), callback_data="register_write_back"))
     
     if  ("@" in mail) == False:
         await bot.edit_message_text(text=errors['empty'], chat_id=message.chat.id, message_id=message_id, reply_markup=keyboard)
+        await UserStateRegister.main_menu.set()
         return
 
     check_user = DataBaseFunc.get_user_for_mail(mail)
     if (check_user != None):
         await bot.edit_message_text(text=errors['is_register'], chat_id=message.chat.id, message_id=message_id, reply_markup=keyboard)
+        await UserStateRegister.main_menu.set()
         return
 
     contact = DataBaseFunc.get_contact(mail=mail)
     if (contact == None):
         await bot.edit_message_text(text=errors['not_found'], chat_id=message.chat.id, message_id=message_id, reply_markup=keyboard)
+        await UserStateRegister.main_menu.set()
         return
     
     user.mail = mail
@@ -146,9 +164,8 @@ async def register_mail_write(message : types.Message, state : FSMContext):
     contact.is_register = True
     user.course_id = contact.course_id
     DataBaseFunc.commit()
-
-    ###### УБРАТЬ ТЕСТОВОЕ ДОБАВЛЕНИЕ КУРСОВ ######
-    DataBaseFunc.add_course_in_user_test(user, DataBaseFunc.get_course(user.course_id))
+  
+    DataBaseFunc.add_course_in_user(user, DataBaseFunc.get_course(user.course_id))
     await bot.edit_message_text(text=get_text(user, 'start'), chat_id=message.chat.id, message_id=message_id, reply_markup=UserGeneratorKeyboard.start_button(user))
     await UserStateMainMenu.main_menu.set()
 
@@ -184,6 +201,7 @@ async def admin_menu(callback:types.CallbackQuery):
     """Отправляет админ-панель."""
     user = DataBaseFunc.get_user(callback.from_user.id)
     await callback.message.edit_text(get_text(user,'main_admin_menu'), reply_markup=AdminGenerateKeyboard.admin_main_menu(user))
+    await DataBaseFunc.delete_messages_from_callback(user, callback.message.message_id)
     await AdminStateMainMenu.admin_menu.set()
 
     

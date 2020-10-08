@@ -6,6 +6,7 @@ import requests
 from time import sleep
 from datetime import datetime
 from database.function import DataBaseFunc
+from database.models import Message
 
 url = "https://api.telegram.org/bot" + "1185185639:AAE6S_YhsM_FRs7F3xEnsZtqLDxWAbfhPso" + "/"
 
@@ -37,7 +38,10 @@ def send_message(user):
             'reply_markup' : keyboard
             }
 
-    return create_requets("POST", "sendMessage", data=data)
+    answer = create_requets("POST", "sendMessage", data=data)
+    message_id = json.loads(answer)['result']["message_id"]
+    message = Message(user_id = user.id, message_id=message_id)
+    DataBaseFunc.add(message)
 
 
 
@@ -55,12 +59,14 @@ all_users = DataBaseFunc.get_users_with_subscribe()
 users = [user for user in all_users if user.is_have_subscription]
 for user in users:
     for ph in [subs for subs in user.purchased_subscriptions if subs.is_check == False]:
+    # for ph in [subs for subs in user.purchased_subscriptions]:
+        if (ph.data_end > datetime.now()):
+            continue
         for channel in ph.courses.channels:
             try:
-                if ph.data_end < datetime.now():
-                    kick_user_from_channel(user, channel.channels) 
-                    ph.is_check = True
-                    DataBaseFunc.commit()
+                kick_user_from_channel(user, channel.channels) 
+                ph.is_check = True
+                DataBaseFunc.commit()
             except:
                 continue
         send_message(user)

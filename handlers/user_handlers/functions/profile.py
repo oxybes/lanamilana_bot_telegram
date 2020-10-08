@@ -5,7 +5,7 @@ from aiogram import types
 from config import get_text, TEXTS
 from handlers.user_handlers.helpers.generator_keyboards import UserGeneratorKeyboard
 from handlers.user_handlers.helpers.help import UserHelp
-from handlers.user_handlers.helpers.user_state import UserStateProfile
+from handlers.user_handlers.helpers.user_state import UserStateMainMenu, UserStateProfile
 
 @dp.callback_query_handler(lambda callback: callback.data == "start_menu_profile", state='*')
 async def start_menu_profile(callback_query: types.CallbackQuery):
@@ -15,6 +15,7 @@ async def start_menu_profile(callback_query: types.CallbackQuery):
     await callback_query.message.edit_text(text=UserHelp.get_start_menu_button_profile_text(user, get_text(user, 'start_button_profile')),
                                            parse_mode='markdown',
                                            reply_markup=UserGeneratorKeyboard.profile_button(user))
+    await DataBaseFunc.delete_messages_from_callback(user, callback_query.message.message_id)
     await UserStateProfile.menu_profile.set()
 
     
@@ -62,6 +63,7 @@ async def menu_profile_back_main_menu(callback:types.CallbackQuery):
     await callback.answer()
     user = DataBaseFunc.get_user(callback.from_user.id)
     await callback.message.edit_text(text = get_text(user, 'start'),reply_markup=UserGeneratorKeyboard.start_button(user))
+    await UserStateMainMenu.main_menu.set()
 
 
 

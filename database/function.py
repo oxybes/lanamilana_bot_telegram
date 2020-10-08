@@ -70,24 +70,36 @@ class DataBaseFunc():
         """Инициализирует курсы в базе данных."""
         courses = session.query(Course).all()
         if len(courses) == 0:
-            course = Course(name="Доступ в группу",
-                            description="Дает доступ в группу", time=1, cost=500)
+            course = Course(name="Базовый",
+                            description="Дает доступ в группу и в канал", time=1, cost=500)
             session.add(course)
-            channel = Channel(id="-458757767", name="fdsf")
+            channel = Channel(id="-1001403037707", name="fdsf")
+            channel2 = Channel(id="-1001321466625", name="test_my_channel")
             session.add(channel)
+            session.add(channel2)
             session.commit()
             ch_in_course = ChannelsInCourse(
                 course_id=course.id, channel_id=channel.id)
             session.add(ch_in_course)
-            course2 = Course(name="Доступ в канал",
-                             description="Дает доступ в канал", time=1, cost=500)
-            session.add(course2)
-            channel2 = Channel(id="-1001321466625", name="test_my_channel")
-            session.add(channel2)
-            session.commit()
-            ch_in_course2 = ChannelsInCourse(
-                course_id=course2.id, channel_id=channel2.id)
+            ch_in_course2 = ChannelsInCourse(course_id=course.id, channel_id=channel2.id)
             session.add(ch_in_course2)
+            course2 = Course(name="Всё, что нужно",
+                             description="Дает доступ в группу и канал", time=1, cost=500)
+            session.add(course2)
+            session.commit()
+            ch_in_course3 = ChannelsInCourse(
+                course_id=course2.id, channel_id=channel.id)
+            ch_in_course4 = ChannelsInCourse(course_id=course2.id, channel_id=channel2.id)
+            session.add(ch_in_course3)
+            session.add(ch_in_course4)
+
+            course3 = Course(name="Индивидуальный",
+                             description="Дает доступ в группу и канал", time=1, cost=500)
+            ch_in_course4 = ChannelsInCourse(
+                course_id=course3.id, channel_id=channel.id)
+            ch_in_course5= ChannelsInCourse(course_id=course3.id, channel_id=channel2.id)
+            session.add(ch_in_course3)
+            session.add(ch_in_course4)
             session.commit()
 
     @staticmethod
@@ -235,6 +247,30 @@ class DataBaseFunc():
     def get_users_with_subscribe():
         return session.query(User).all()
 
+
+    @staticmethod
+    async def delete_messages(user : User):
+        """Удаляет ненужные сообщения пользователя."""
+        for message in user.messages_for_delete:
+            try:
+                await bot.delete_message(chat_id=user.chat_id, message_id=message.message_id)
+                session.delete(message)
+                session.commit()
+            except:
+                pass
+
+    @staticmethod
+    async def delete_messages_from_callback(user : User, message_id : int):
+        """Удаляет все сообщения, кроме тех, с которого была нажата кнопка"""
+        for message in user.messages_for_delete:
+            try:
+                if (message.message_id == message_id):
+                    continue
+                await bot.delete_message(chat_id=user.chat_id, message_id=message.message_id)
+                session.delete(message)
+                session.commit()
+            except:
+                pass
     # endregion
 
     # region Работа с классом Chanell

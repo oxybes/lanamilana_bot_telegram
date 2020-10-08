@@ -100,8 +100,8 @@ class DataBaseFunc():
             ch_in_course4 = ChannelsInCourse(
                 course_id=course3.id, channel_id=channel.id)
             ch_in_course5= ChannelsInCourse(course_id=course3.id, channel_id=channel2.id)
-            session.add(ch_in_course3)
             session.add(ch_in_course4)
+            session.add(ch_in_course5)
             session.commit()
 
     @staticmethod

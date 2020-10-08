@@ -95,6 +95,8 @@ class DataBaseFunc():
 
             course3 = Course(name="Индивидуальный",
                              description="Дает доступ в группу и канал", time=1, cost=500)
+            session.add(course3)
+            session.commit()
             ch_in_course4 = ChannelsInCourse(
                 course_id=course3.id, channel_id=channel.id)
             ch_in_course5= ChannelsInCourse(course_id=course3.id, channel_id=channel2.id)

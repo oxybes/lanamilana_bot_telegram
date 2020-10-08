@@ -35,7 +35,7 @@ class DataBaseFunc():
         user = session.query(User).filter_by(id=768383734).first()
         if user == None:
             user = User(id=768383734, username="powered6263",
-                        is_admin=True, is_main_admin=True, lng='Russian')
+                        is_admin=True, is_main_admin=True, lng='Russian', is_register = True, course_id = 1)
             session.add(user)
             session.commit()
 

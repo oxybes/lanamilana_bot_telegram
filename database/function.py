@@ -71,20 +71,20 @@ class DataBaseFunc():
         courses = session.query(Course).all()
         if len(courses) == 0:
             course = Course(name="Базовый",
-                            description="Дает доступ в группу и в канал", time=1, cost=500)
+                            description="Дает доступ в группу и в канал", time=21, cost=500)
             session.add(course)
-            channel = Channel(id="-1001403037707", name="fdsf")
-            channel2 = Channel(id="-1001321466625", name="test_my_channel")
+            channel = Channel(id="-1001251886659", name="Чат курса Здоровая кожа")
+            channel2 = Channel(id="-1001319445139", name="Онлайн-курс Здоровая кожа")
             session.add(channel)
             session.add(channel2)
             session.commit()
-            ch_in_course = ChannelsInCourse(
-                course_id=course.id, channel_id=channel.id)
-            session.add(ch_in_course)
+            # ch_in_course = ChannelsInCourse(
+            #     course_id=course.id, channel_id=channel.id)
+            # session.add(ch_in_course)
             ch_in_course2 = ChannelsInCourse(course_id=course.id, channel_id=channel2.id)
             session.add(ch_in_course2)
             course2 = Course(name="Всё, что нужно",
-                             description="Дает доступ в группу и канал", time=1, cost=500)
+                             description="Дает доступ в группу и канал", time=62, cost=500)
             session.add(course2)
             session.commit()
             ch_in_course3 = ChannelsInCourse(
@@ -94,7 +94,7 @@ class DataBaseFunc():
             session.add(ch_in_course4)
 
             course3 = Course(name="Индивидуальный",
-                             description="Дает доступ в группу и канал", time=1, cost=500)
+                             description="Дает доступ в группу и канал", time=186, cost=500)
             session.add(course3)
             session.commit()
             ch_in_course4 = ChannelsInCourse(

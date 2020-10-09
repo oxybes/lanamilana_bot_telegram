@@ -34,7 +34,7 @@ class UserGeneratorKeyboard():
                 continue
             buttons.append(but)
 
-        
+        buttons.append(InlineKeyboardButton(get_text_but(user, 'register_contact'), callback_data="call_manager", url=get_text_but(user, 'register_contact_url')))
         keyboard.row_width = 1
         keyboard.add(*buttons)
         # keyboard.row(*buttons)

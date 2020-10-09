@@ -1,24 +1,4 @@
 {
-    "selected_language" : "Selected language.",
-
-    "English": 
-    {
-        "start": "hi! i am  test",
-
-        "start_button_profile" : "Here you can see your active subscriptions. And other information.",
-
-        "start_button_profile_id" : "Your ID: ",
-        "start_button_profile_current_course" : "Active subscription: ",
-        "start_button_profile_left_days" : "Days left: ",
-        "start_button_profile_balance" : "Your balance: ",
-        "start_button_profile_dont_have_course" : "There are no active subscriptions",
-
-        "main_menu_subscribe" : "Choose a pricing plan",
-
-        "subscribe_menu_test_payments" : "This is a test payment. Use a Bank card for payment 1111 1111 1111 1026, 12/22, CVC 000"
-
-    }, 
-
     "Russian": 
     {
         "start": "Привет! Здесь вы можете получить доступ к платному каналу или чату, а также посмотреть свои подписки.",

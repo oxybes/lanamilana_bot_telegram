@@ -29,7 +29,7 @@ def send_message(user):
     text = "У вас кончилась подписка, пожалуйста, продлите её, чтобы иметь доступ к каналам."
     text_button = "Продлить подписку"
     keyboard = json.dumps(
-                           {"inline_keyboard": [[{"text": "Продлить подписку", "callback_data": "subscribe_continue_pay"}]]}
+                           {"inline_keyboard": [[{"text": "Продлить подписку", "callback_data": "subscribe_continue_pay"}], [{"text" : "Связаться с менеджером", "callback_data" : "continue_subs_manager", "url" : "t.me/oxybes"}]]}
                          )
     
     data = {
@@ -53,8 +53,6 @@ def kick_user_from_channel(user, channel):
 
     update_info_user(user)
     
-
-
 all_users = DataBaseFunc.get_users_with_subscribe()
 users = [user for user in all_users if user.is_have_subscription]
 for user in users:

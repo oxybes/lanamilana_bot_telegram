@@ -6,4 +6,6 @@ from misc import bot, dp
 
 @dp.message_handler(state = "*")
 async def default_message_delete(message : types.Message):
+    if (message.chat.type == "supergroup"):
+        return
     await message.delete()

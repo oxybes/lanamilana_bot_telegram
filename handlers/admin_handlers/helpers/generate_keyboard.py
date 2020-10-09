@@ -21,6 +21,7 @@ class AdminGenerateKeyboard():
 
         keyboard.row(butt_managing_courses, butt_managing_users)
         keyboard.add(butt_managing_admins)
+        keyboard.add(butt_who_used)
         # keyboard.add(butt_spam)
         # keyboard.add(butt_generate_new_link)
         keyboard.add(butt_back)

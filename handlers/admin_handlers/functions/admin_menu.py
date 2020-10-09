@@ -1,4 +1,5 @@
 from aiogram import types
+from aiogram.types.inline_keyboard import InlineKeyboardButton, InlineKeyboardMarkup
 from config import TEXTS, get_text
 from database.function import DataBaseFunc
 from database.models import User
@@ -9,6 +10,7 @@ from handlers.admin_handlers.helpers.generate_keyboard import \
 from handlers.user_handlers.helpers.generator_keyboards import \
     UserGeneratorKeyboard
 from handlers.user_handlers.helpers.user_state import UserStateMainMenu
+from handlers.admin_handlers.helpers.help import AdminHelper
 from misc import bot, dp
 
 
@@ -38,13 +40,15 @@ async def admin_main_menu_managing_users(callback: types.CallbackQuery):
     await callback.message.edit_text(get_text(user, 'admin_menu_managing_users'), reply_markup=AdminGenerateKeyboard.admin_menu_managing_users(user))
     await AdminStateManagingUser.main_menu.set()
 
+
 @dp.callback_query_handler(lambda callback: callback.data == "admin_menu_whos", state=AdminStateMainMenu.admin_menu)
-async def admin_main_menu_managing_users(callback: types.CallbackQuery):
-    """Отправляет меню управления пользователями"""
+async def admin_whos(callback: types.CallbackQuery):
     await callback.answer()
     user = DataBaseFunc.get_user(callback.from_user.id)
-    await callback.message.edit_text(get_text(user, 'admin_menu_managing_users'), reply_markup=AdminGenerateKeyboard.admin_menu_managing_users(user))
-    await AdminStateManagingUser.main_menu.set()
+    keyboard = InlineKeyboardMarkup()
+    keyboard.add(InlineKeyboardButton(text="Назад", callback_data="admin_in_admin_menu"))
+    await callback.message.edit_text(text=AdminHelper.get_whos_admin(user), reply_markup=keyboard)
+    await AdminStateMainMenu.whos.set()
 
 
 

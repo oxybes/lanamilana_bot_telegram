@@ -3,6 +3,7 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 class AdminStateMainMenu(StatesGroup):
     admin_menu = State()
     managing_courses = State()
+    whos = State()
 
 class AdminStateManagingCourses(StatesGroup):
     add_course = State()

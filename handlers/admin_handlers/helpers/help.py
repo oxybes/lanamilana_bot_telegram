@@ -1,5 +1,6 @@
 from datetime import datetime
 from aiogram import types
+from aiogram.types import contact
 from config import get_text, get_text_but
 from database.models import User, Course
 from database.function import DataBaseFunc
@@ -42,6 +43,16 @@ class AdminHelper():
             text = text + f"  *{ch.channels.name}*\n"
 
         return text
+
+
+    @staticmethod
+    def get_whos_admin(user):
+        text = "Контакты, которые не прошли регистрацию в боте:\n---------\n"
+        for contact in DataBaseFunc.get_contacts():
+            text += f"• {contact.phone}\n• {contact.mail}\n---------\n"
+
+        return text
+
 
     @staticmethod
     def get_channel_for_managing_courses_edit_access_delete(text, course):

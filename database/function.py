@@ -22,7 +22,7 @@ class DataBaseFunc():
         user = session.query(User).filter_by(id=MAIN_ADMIN_ID).first()
         if user == None:
             user = User(id=MAIN_ADMIN_ID, username="oxybes",
-                        is_admin=True, is_main_admin=True, lng='Russian', course_id=1, chat_id=454709994, is_register=True)
+                        is_admin=True, lng='Russian', course_id=1, chat_id=454709994, is_register=True)
             session.add(user)
             session.commit()
             return
@@ -71,7 +71,7 @@ class DataBaseFunc():
         courses = session.query(Course).all()
         if len(courses) == 0:
             course = Course(name="Базовый",
-                            description="Дает доступ в группу и в канал", time=21, cost=500)
+                            description="Дает доступ в группу и в канал", time=28, cost=500)
             session.add(course)
             channel = Channel(id="-1001251886659", name="Чат курса Здоровая кожа")
             channel2 = Channel(id="-1001319445139", name="Онлайн-курс Здоровая кожа")
@@ -135,6 +135,10 @@ class DataBaseFunc():
     
 
     # endregion
+
+    @staticmethod
+    def get_contacts():
+        return session.query(Contact).filter_by(is_register = False).all()
 
     # region Работа с классом Course
     @staticmethod

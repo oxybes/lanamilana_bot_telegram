@@ -9,7 +9,7 @@ from .models import Base
 #     filename_bd = 'sqlite://///root//lanamilana_bot_telegram//database/database.db'
 
 # engine = create_engine(filename_bd, echo = False)
-engine = create_engine('postgresql://postgres:7105017829@193.187.175.22:5432/lanamilana', echo = False)
+engine = create_engine('postgresql://postgres:7105017829@193.187.174.95:5432/lanamilana', echo = False)
 metadata = Base.metadata
 metadata.create_all(engine)
 Session = sessionmaker(bind=engine)

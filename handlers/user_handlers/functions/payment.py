@@ -88,8 +88,6 @@ async def subscribe_continue_pay(callback : types.CallbackQuery, state : FSMCont
     """Продлить подписку после её окончания"""
     await callback.answer()
     user = DataBaseFunc.get_user(callback.from_user.id)
-    if (TOKEN_SHOP_YANDEX.split(':')[1] == "TEST"):
-        await callback.message.edit_text(text=get_text(user, 'subscribe_menu_test_payments'))
     
     course = DataBaseFunc.get_course(user.course_id)
     timestamp = get_timestamp(user)

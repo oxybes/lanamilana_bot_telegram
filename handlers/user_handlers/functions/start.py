@@ -1,4 +1,6 @@
 import re
+from aiogram.types.inline_keyboard import InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.utils.helper import Helper
 from sqlalchemy.orm import session
 from database.function import DataBaseFunc
 from database.models import Contact, User, Message
@@ -10,6 +12,7 @@ from handlers.user_handlers.helpers.generator_keyboards import UserGeneratorKeyb
 from handlers.user_handlers.helpers.user_state import UserStateMainMenu, UserStateRegister
 from handlers.admin_handlers.helpers.admin_state import AdminStateMainMenu
 from handlers.admin_handlers.helpers.generate_keyboard import AdminGenerateKeyboard
+from handlers.user_handlers.helpers.help import UserHelp
 
 
 @dp.message_handler(commands = ['start'], state = '*')
@@ -46,12 +49,26 @@ async def start_message(message: types.Message):
     else:
         if (user.chat_id == None):
             user.chat_id = message.chat.id
-        mess = await message.answer(get_text(user,'start'), reply_markup=UserGeneratorKeyboard.start_button(user))
+        mess = await message.answer(get_text(user,'start'), reply_markup= await UserGeneratorKeyboard.start_button(user))
         await DataBaseFunc.delete_messages(user)
         ms = Message(user_id=user.id, message_id = mess.message_id)
         DataBaseFunc.add(ms)
         await UserStateMainMenu.main_menu.set()
 
+@dp.callback_query_handler(lambda callback:callback.data == "start_menu_schedule", state = "*")
+async def shedule(callback : types.CallbackQuery):
+    await callback.answer()
+    user = DataBaseFunc.get_user(callback.from_user)
+    ketboard = InlineKeyboardMarkup()
+    ketboard.add(InlineKeyboardButton("Назад", callback_data="shedule_back"))
+    await callback.message.edit_text(text=UserHelp.get_shedule(), reply_markup=ketboard)
+
+
+@dp.callback_query_handler(lambda callback : callback.data == "shedule_back", state = "*")
+async def shedule_back(callback : types.CallbackQuery):
+    user = DataBaseFunc.get_user(callback.from_user.id)
+    await callback.message.edit_text(get_text(user, 'start'), reply_markup=await UserGeneratorKeyboard.start_button(user))
+    await UserStateMainMenu.main_menu.set()
 
 @dp.callback_query_handler(lambda callback : callback.data == "register_write_back", state='*')
 async def register_write_back(callback : types.CallbackQuery):
@@ -123,7 +140,7 @@ async def register_phone_write(message : types.Message, state : FSMContext):
     
 
     DataBaseFunc.add_course_in_user(user, DataBaseFunc.get_course(user.course_id))
-    await bot.edit_message_text(text=get_text(user, 'start'), chat_id=message.chat.id, message_id=message_id, reply_markup=UserGeneratorKeyboard.start_button(user))
+    await bot.edit_message_text(text=get_text(user, 'start'), chat_id=message.chat.id, message_id=message_id, reply_markup= await UserGeneratorKeyboard.start_button(user))
     await UserStateMainMenu.main_menu.set()
     
 
@@ -166,7 +183,7 @@ async def register_mail_write(message : types.Message, state : FSMContext):
     DataBaseFunc.commit()
   
     DataBaseFunc.add_course_in_user(user, DataBaseFunc.get_course(user.course_id))
-    await bot.edit_message_text(text=get_text(user, 'start'), chat_id=message.chat.id, message_id=message_id, reply_markup=UserGeneratorKeyboard.start_button(user))
+    await bot.edit_message_text(text=get_text(user, 'start'), chat_id=message.chat.id, message_id=message_id, reply_markup=await UserGeneratorKeyboard.start_button(user))
     await UserStateMainMenu.main_menu.set()
 
 
@@ -177,7 +194,7 @@ async def choose_lng(callback_query:types.CallbackQuery):
     lng = callback_query.data[8:]
     user.lng = lng
     DataBaseFunc.commit()
-    await callback_query.message.edit_text(get_text(user, 'start'), reply_markup=UserGeneratorKeyboard.start_button(user))
+    await callback_query.message.edit_text(get_text(user, 'start'), reply_markup=await UserGeneratorKeyboard.start_button(user))
     await UserStateMainMenu.main_menu.set()
     
 
@@ -192,7 +209,7 @@ async def main_menu_subscribe(callback:types.CallbackQuery):
 async def main_menu_back(callback:types.CallbackQuery):
     """Возвращает пользователя в главное меню из меню с выбором тарифа для оплаты."""
     user = DataBaseFunc.get_user(callback.from_user.id)
-    await callback.message.edit_text(get_text(user, 'start'), reply_markup=UserGeneratorKeyboard.start_button(user))
+    await callback.message.edit_text(get_text(user, 'start'), reply_markup=await UserGeneratorKeyboard.start_button(user))
     await UserStateMainMenu.main_menu.set()
 
 

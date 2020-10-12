@@ -22,7 +22,7 @@ class UserGeneratorKeyboard():
         return keyboard
 
     @staticmethod
-    def start_button(user: User) -> InlineKeyboardMarkup:
+    async def start_button(user: User) -> InlineKeyboardMarkup:
         """Генерирует клавиатуру для команды /start"""
         keyboard = InlineKeyboardMarkup()
         buttons = []
@@ -33,7 +33,11 @@ class UserGeneratorKeyboard():
             if (key == 'admin') and (not user.is_admin):
                 continue
             buttons.append(but)
-
+        buttons.append(InlineKeyboardButton(text="Расписание", callback_data="start_menu_schedule"))
+        if (user.is_have_subscription):
+            channels = await UserGeneratorKeyboard.get_user_channel(user)
+            for but in channels:
+                buttons.append(but)
         buttons.append(InlineKeyboardButton(get_text_but(user, 'register_contact'), callback_data="call_manager", url=get_text_but(user, 'register_contact_url')))
         keyboard.row_width = 1
         keyboard.add(*buttons)
@@ -105,6 +109,23 @@ class UserGeneratorKeyboard():
         keyboard.add(*buttons)
         keyboard.add(InlineKeyboardButton(get_text_but(user, 'access_menu_get_course_back'), callback_data="access_menu_get_course_back"))
         return keyboard
+
+    @staticmethod
+    async def get_user_channel(user: User):
+        buttons = []
+        channels = []
+
+        for purch in DataBaseFunc.get_user_subscribes(user):
+            for channel in purch.courses.channels:
+                ids = [x.id for x in channels]
+                if (channel.channel_id in ids) == False:
+                    channels.append(channel.channels)
+      
+        for channel in channels:
+            if channel.link == None:
+                await DataBaseFunc.create_link_invoice(channel)
+            buttons.append(InlineKeyboardButton(channel.name, callback_data=f"access_menu_get_channels_{channel.id}", url=channel.link))
+        return buttons
 
     @staticmethod
     async def get_user_channels(user : User) -> InlineKeyboardMarkup:

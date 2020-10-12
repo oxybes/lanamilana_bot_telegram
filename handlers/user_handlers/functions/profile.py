@@ -62,7 +62,7 @@ async def menu_profile_back_main_menu(callback:types.CallbackQuery):
     """Обработка кнопки вернутся в главное меню"""
     await callback.answer()
     user = DataBaseFunc.get_user(callback.from_user.id)
-    await callback.message.edit_text(text = get_text(user, 'start'),reply_markup=UserGeneratorKeyboard.start_button(user))
+    await callback.message.edit_text(text = get_text(user, 'start'),reply_markup=await UserGeneratorKeyboard.start_button(user))
     await UserStateMainMenu.main_menu.set()
 
 

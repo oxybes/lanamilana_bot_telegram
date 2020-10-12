@@ -31,14 +31,14 @@ async def get_access_main_menu_back(callback : types.CallbackQuery):
     """Кнпка назад, возвращает пользователя в главное меню"""
     await callback.answer()
     user = DataBaseFunc.get_user(callback.from_user.id)
-    await callback.message.edit_text(get_text(user, 'start'), reply_markup=UserGeneratorKeyboard.start_button(user))
+    await callback.message.edit_text(get_text(user, 'start'),  reply_markup= await UserGeneratorKeyboard.start_button(user))
     await UserStateMainMenu.main_menu.set()
 
 @dp.callback_query_handler(lambda callback : callback.data == "get_access_choose_channels_back", state = UserStateGetAccessCourse.choose_course)
 async def get_access_choose_channels_back(callback : types.CallbackQuery):
     """Возвращает пользователя обратно в выбор курса"""
     user = DataBaseFunc.get_user(callback.from_user.id)
-    await callback.message.edit_text(get_text(user,'start'), reply_markup=UserGeneratorKeyboard.start_button(user))
+    await callback.message.edit_text(get_text(user,'start'), reply_markup=await UserGeneratorKeyboard.start_button(user))
     await UserStateMainMenu.main_menu.set()
 
 @dp.callback_query_handler(state = UserStateGetAccessCourse.choose_course)

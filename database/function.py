@@ -74,7 +74,7 @@ class DataBaseFunc():
                             description="Дает доступ в группу и в канал", time=28, cost=500)
             session.add(course)
             channel = Channel(id="-1001251886659", name="Чат курса Здоровая кожа")
-            channel2 = Channel(id="-1001319445139", name="Онлайн-курс Здоровая кожа")
+            channel2 = Channel(id="-1001319445139", name="Курс «Здоровая кожа»")
             session.add(channel)
             session.add(channel2)
             session.commit()
@@ -87,20 +87,14 @@ class DataBaseFunc():
                              description="Дает доступ в группу и канал", time=62, cost=500)
             session.add(course2)
             session.commit()
-            ch_in_course3 = ChannelsInCourse(
-                course_id=course2.id, channel_id=channel.id)
             ch_in_course4 = ChannelsInCourse(course_id=course2.id, channel_id=channel2.id)
-            session.add(ch_in_course3)
             session.add(ch_in_course4)
 
             course3 = Course(name="Индивидуальный",
                              description="Дает доступ в группу и канал", time=186, cost=500)
             session.add(course3)
             session.commit()
-            ch_in_course4 = ChannelsInCourse(
-                course_id=course3.id, channel_id=channel.id)
             ch_in_course5= ChannelsInCourse(course_id=course3.id, channel_id=channel2.id)
-            session.add(ch_in_course4)
             session.add(ch_in_course5)
             session.commit()
 

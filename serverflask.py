@@ -25,6 +25,8 @@ def delete():
 @app.route('/testhook', methods=["POST"])
 def testhook():
     form = request.form
+    if form['test'] == 'test':
+        return 'ok'
     phone = "".join(ch for ch in form['Phone'] if  ch.isdigit())
     mail = form['Email']
     payment = form['payment']
@@ -39,6 +41,7 @@ def testhook():
     else:
         id_tariff = 3
     DataBaseFunc.add_contact(phone, mail, id_tariff)
+    return 'ok'
 
 
 @app.route('/test')
@@ -49,4 +52,4 @@ if __name__ == "__main__":
     if (os.name == "nt"):
         app.run(debug=True)
     else:
-        app.run(host="193.187.175.22", port="8080")
+        app.run(host="193.187.174.95", port="8080")

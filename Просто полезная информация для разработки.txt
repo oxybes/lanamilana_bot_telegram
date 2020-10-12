@@ -6,6 +6,6 @@ exportChatInviteLink - новая  инвайт ссылка
 
 
 Запуск крона
-> * * * * * /usr/bin/python3.8 /root/lanamilana_bot_telegram/cheker.py >>/root/lanamilana_bot_telegram/stdout.log 2>>/root/lanamilana_bot_telegram/stderr.log
+> * */1 * * * /usr/bin/python3.8 /root/lanamilana_bot_telegram/cheker.py >>/root/lanamilana_bot_telegram/stdout.log 2>>/root/lanamilana_bot_telegram/stderr.log
 Пути до файлов на линуксе должны быть абсолютными.
 

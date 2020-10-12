@@ -75,7 +75,7 @@ async def process_successful_payment(message: types.Message, state:FSMContext):
     mess = await bot.send_message(
         message.chat.id,
         str(get_text(user, 'subscribe_menu_good_pay')).format(amount=course.cost,currency=message.successful_payment.currency, coursename=course.name))
-    mess2 = await bot.send_message(message.chat.id, get_text(user, 'start'), reply_markup=UserGeneratorKeyboard.start_button(user))
+    mess2 = await bot.send_message(message.chat.id, get_text(user, 'start'), reply_markup=await UserGeneratorKeyboard.start_button(user))
     await DataBaseFunc.delete_messages(user)
     ms = Message(user_id=user.id, message_id=mess.message_id)
     ms2 = Message(user_id=user.id, message_id=mess2.message_id)

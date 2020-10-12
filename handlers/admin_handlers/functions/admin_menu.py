@@ -19,7 +19,7 @@ async def admin_menu_back(callback: types.CallbackQuery):
     """Возвращает в главное меню из админ-панели."""
     await callback.answer()
     user = DataBaseFunc.get_user(callback.from_user.id)
-    await callback.message.edit_text(get_text(user, 'start'), reply_markup=UserGeneratorKeyboard.start_button(user))
+    await callback.message.edit_text(get_text(user, 'start'), reply_markup=await UserGeneratorKeyboard.start_button(user))
     await UserStateMainMenu.main_menu.set()
 
 

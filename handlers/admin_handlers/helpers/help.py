@@ -164,9 +164,14 @@ class AdminHelper():
         users = DataBaseFunc.get_all_admins()
         text = f"*{data['admin']}*\n"
         for admin in users:
-            text += "• " +admin.username + "\n"
+            text += "• " + AdminHelper.escape_telegrambot_underscore(admin.username) + "\n"
         text = text[:-1]
         return text
+
+
+    @staticmethod
+    def escape_telegrambot_underscore(txt):
+        return txt.replace("_", "\\_")
 
     @staticmethod
     def get_whos(user):

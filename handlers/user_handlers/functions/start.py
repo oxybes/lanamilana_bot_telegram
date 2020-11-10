@@ -109,6 +109,8 @@ async def register_phone_write(message : types.Message, state : FSMContext):
     data = await state.get_data()
     message_id = data['callback_message_id']
     phone = "".join(ch for ch in message.text if  ch.isdigit())
+    if (phone[0] == '8'):
+        phone = '7' + phone[1:]
     errors = get_text(user, 'write_phone_errors')
     keyboard = UserGeneratorKeyboard.register_button(user)
     # keyboard = types.InlineKeyboardMarkup()
@@ -153,6 +155,7 @@ async def register_mail_write(message : types.Message, state : FSMContext):
     data = await state.get_data()
     message_id = data['callback_message_id']
     mail = message.text
+    mail = mail.lower()
     errors = get_text(user, 'write_mail_errors')
     keyboard = UserGeneratorKeyboard.register_button(user)
     # keyboard = types.InlineKeyboardMarkup()

@@ -1,7 +1,7 @@
 import os
 import json
 import re
-import datetime
+
 from flask import Flask, request, render_template
 from database.function import DataBaseFunc
 
@@ -28,9 +28,8 @@ def addcontact():
         phone = request.form.get('phone')
         id_course= request.form.get('id_course')
         if (email != '' and phone != '' and id_course != ''):
-            phone = "".join(ch for ch in phone if  ch.isdigit())
-            if (phone[0] == '8'):
-                phone = '7' + phone[1:]
+            phone = "".join(ch for ch in phone if ch.isdigit()) if (phone[0] == '8'):
+    phone = '7' + phone[1:]
             email = email.lower()
             is_added = DataBaseFunc.add_contact(phone, email, id_course)
             if (is_added):
@@ -49,14 +48,10 @@ def table():
   </head>
   <body>
         <table>
-    <tr><th>   ID   </th><th>   Username   </th><th>   Phone   </th><th>   Mail   </th><th> Tariff</th> <th>  End day </th>  </tr>\n"""
+    <tr><th>   ID   </th><th>   Username   </th><th>   Phone   </th><th>   Mail   </th></tr>\n"""
     users = DataBaseFunc.get_users_for_table()
     for user in users:
-        day = 0
-        subs = DataBaseFunc.get_current_subscribe(user)
-        if ((user.is_have_subscription) and (subs!= None)):
-            day = (subs.data_end - datetime.datetime.now()).days
-        html += f"<tr><td>{user.id}</td><td>{user.username}</td><td>{user.phone}</td><td>{user.mail}</td><td>{user.course_id}</td><td>{day}</td></tr>\n"
+        html += f"<tr><td>{user.id}</td><td>{user.username}</td><td>{user.phone}</td><td>{user.mail}</td></tr>\n"
     
     html += """ 
         </table>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+
+    {% if message %}
+        <p>{{ message }}</p>
+    {% endif %}
+    
+    <form action="" method="post">
+        <p>
+	    <label for="phone">Phone</label>
+	    <input type="phone" name="phone">
+	</p>
+	<p>
+	    <label for="email">Email</label>
+	    <input type="email" name="email">
+    </p>
+    <p>
+	    <label for="id_course">id_course</label>
+	    <input type="id_course" name="id_course">
+	</p>
+	<p>
+	    <input type="submit">
+	</p>
+    </form>
+    
+</body>
+</html>

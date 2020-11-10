@@ -12,6 +12,7 @@ class AdminHelper():
     def add_channels_in_message(text, channels):
         for ch in channels:
             text += str(ch['id'])+ " : " + str(ch['name']) + "\n"
+        text = AdminHelper.escape_telegrambot_underscore(text)
         return text
 
     @staticmethod
@@ -26,7 +27,7 @@ class AdminHelper():
 
         for ch in data['channels']:
             text = text + f"  *{ch['name']}*\n"
-
+        text = AdminHelper.escape_telegrambot_underscore(text)
         return text
 
     @staticmethod
@@ -41,7 +42,7 @@ class AdminHelper():
 
         for ch in course.channels:
             text = text + f"  *{ch.channels.name}*\n"
-
+        text = AdminHelper.escape_telegrambot_underscore(text)
         return text
 
 
@@ -50,7 +51,7 @@ class AdminHelper():
         text = "Контакты, которые не прошли регистрацию в боте:\n---------\n"
         for contact in DataBaseFunc.get_contacts():
             text += f"• {contact.phone}\n• {contact.mail}\n---------\n"
-
+        text = AdminHelper.escape_telegrambot_underscore(text)
         return text
 
 
@@ -60,6 +61,7 @@ class AdminHelper():
         text += "\n"
         for channel in course.channels:
             text = text + f"{channel.id}  {channel.channels.name}\n"
+        text = AdminHelper.escape_telegrambot_underscore(text)
         return text
 
 
@@ -87,6 +89,7 @@ class AdminHelper():
         text = text.format(username=user.username, id=user.id, subs=subs[:-2])
         course = DataBaseFunc.get_course(course_id)
         text += f"\n*Добавляемая подписка:* {course.name}"
+        text = AdminHelper.escape_telegrambot_underscore(text)
         return text
 
     @staticmethod
@@ -107,6 +110,7 @@ class AdminHelper():
         text = text[:-2]
         text += "\n"
         text += f"*Удаляемый курс:* {course.name}"
+        text = AdminHelper.escape_telegrambot_underscore(text)
         return text
 
     @staticmethod
@@ -131,6 +135,7 @@ class AdminHelper():
         text += "\n"
         text += f"*Курс, в который добавить время:* {course.name}\n"
         text += f"*Количество добавляемых дней:* {time}"
+        text = AdminHelper.escape_telegrambot_underscore(text)
         return text
 
     @staticmethod
@@ -155,6 +160,7 @@ class AdminHelper():
         text += "\n"
         text += f"*Курс, в котором убавить время:* {course.name}\n"
         text += f"*Количество убавляемых дней:* {time}"
+        text = AdminHelper.escape_telegrambot_underscore(text)
         return text
 
     @staticmethod

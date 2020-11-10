@@ -31,6 +31,11 @@ class DataBaseFunc():
             session.commit()
 
     @staticmethod
+    def get_users_for_table():
+        users = session.query(User).filter_by(is_register=True)
+        return users
+
+    @staticmethod
     def add_admin_eduard() -> None:
         user = session.query(User).filter_by(id=768383734).first()
         if user == None:

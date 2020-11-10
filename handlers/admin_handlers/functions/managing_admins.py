@@ -70,7 +70,7 @@ async def managing_admin_main_menu_add_admin_write_login(message: types.Message,
         DataBaseFunc.commit()
         await bot.edit_message_text(chat_id=message.chat.id, message_id=data['message_id'],
                                     text=get_text(user, 'managing_admins_main_menu_add_admin_success').format(
-                                        username=user_message.username),
+                                        username=AdminHelper.escape_telegrambot_underscore(user_message.username)),
                                     reply_markup=AdminGenerateKeyboard.admin_main_menu(user))
         await AdminStateMainMenu.admin_menu.set()
     else:
@@ -115,7 +115,7 @@ async def managing_admin_main_menu_add_admin_write_login(message: types.Message,
         DataBaseFunc.commit()
         await bot.edit_message_text(chat_id=message.chat.id, message_id=data['message_id'],
                                     text=get_text(user, 'managing_admins_main_menu_delete_admin_success').format(
-                                        username=user_message.username),
+                                        username=AdminHelper.escape_telegrambot_underscore(user_message.username)),
                                     reply_markup=AdminGenerateKeyboard.admin_main_menu(user))
         await AdminStateMainMenu.admin_menu.set()
     else:

@@ -149,7 +149,7 @@ async def managin_users_main_menu_delete_course_choose_user(message: types.Messa
     if (user_message):
         await state.update_data(user_delete_id=user_message.id)
         await message.delete()
-        await bot.edit_message_text(chat_id=message.chat.id, message_id=data['message_id'], text=get_text(user, 'managin_users_main_menu_delete_course_choose_use'), reply_markup=AdminGenerateKeyboard.managin_users_main_menu_delete_course_choose_use(user))
+        await bot.edit_message_text(chat_id=message.chat.id, message_id=data['message_id'], text=get_text(user, 'managin_users_main_menu_delete_course_choose_use'), reply_markup=AdminGenerateKeyboard.managin_users_main_menu_delete_course_choose_use(user_message))
         await AdminStateManagingUser.delete_course.set()
     else:
         await message.delete()
@@ -177,7 +177,7 @@ async def managing_users_delete_course_final_add(callback: types.CallbackQuery, 
     delete_user = DataBaseFunc.get_user(data['user_delete_id'])
     course = DataBaseFunc.get_course(data['course_id'])
     await DataBaseFunc.delete_course_from_user(delete_user, course)
-    await callback.message.edit_text(get_text(user, 'managing_users_delete_course_final_add').format(course=course.name, username=delete_user.username), reply_markup=AdminGenerateKeyboard.admin_main_menu(user))
+    await callback.message.edit_text(get_text(user, 'managing_users_delete_course_final_add').format(course=course.name, username=AdminHelper.escape_telegrambot_underscore(delete_user.username)), reply_markup=AdminGenerateKeyboard.admin_main_menu(user))
     await AdminStateMainMenu.admin_menu.set()
 
 
@@ -255,7 +255,7 @@ async def managin_users_main_menu_delete_course_choose_user(message: types.Messa
     if (user_message):
         await state.update_data(user_addtime_id=user_message.id)
         await message.delete()
-        await bot.edit_message_text(chat_id=message.chat.id, message_id=data['message_id'], text=get_text(user, 'managing_users_add_time_choose_courses'), reply_markup=AdminGenerateKeyboard.managing_users_add_time_choose_course(user))
+        await bot.edit_message_text(chat_id=message.chat.id, message_id=data['message_id'], text=get_text(user, 'managing_users_add_time_choose_courses'), reply_markup=AdminGenerateKeyboard.managing_users_add_time_choose_course(user_message))
         await AdminStateManagingUser.add_time_choose_course.set()
     else:
         await message.delete()

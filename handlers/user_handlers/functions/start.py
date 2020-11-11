@@ -28,7 +28,7 @@ async def start_message(message: types.Message):
     await message.delete()
 
     if user == None:
-        user = User(id = message.from_user.id, username=message.from_user.username, chat_id=message.chat.id)
+        user = User(id = message.from_user.id, username=message.from_user.username, chat_id=message.chat.id, is_check_seven_days = False)
         DataBaseFunc.add(user)
         DataBaseFunc.commit()
         mess = await message.answer(get_text(user, 'register'), reply_markup=UserGeneratorKeyboard.register_button(user))

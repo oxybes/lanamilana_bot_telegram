@@ -22,7 +22,7 @@ def addcontact():
     email ='' 
     phone ='' 
     id_course = ''
-    message = 'id_course. 1 - Базовый, 2 - Всё, что нужно, 3 - индивидуальный'
+    message = 'id_course. 1 - Базовый, 2 - Всё, что нужно, 3 - индивидуальный. Для нового потока 12, 22, 32'
     if request.method == 'POST':
         email = request.form.get('email')  # запрос к данным формы
         phone = request.form.get('phone')
@@ -41,29 +41,17 @@ def addcontact():
     return render_template('addcontact.html', message=message)
 
 
+def get_day(user):
+    day = 0
+    subs = DataBaseFunc.get_current_subscribe(user)
+    if ((user.is_have_subscription) and (subs!= None)):
+        day = (subs.data_end - datetime.datetime.now()).days
+    return day
+
 @app.route('/table')
 def table():
-    html = """<html>
-  <head>
-    <title>Home Page</title>
-  </head>
-  <body>
-        <table>
-    <tr><th>   ID   </th><th>   Username   </th><th>   Phone   </th><th>   Mail   </th><th> Tariff</th> <th>  End day </th>  </tr>\n"""
     users = DataBaseFunc.get_users_for_table()
-    for user in users:
-        day = 0
-        subs = DataBaseFunc.get_current_subscribe(user)
-        if ((user.is_have_subscription) and (subs!= None)):
-            day = (subs.data_end - datetime.datetime.now()).days
-        html += f"<tr><td>{user.id}</td><td>{user.username}</td><td>{user.phone}</td><td>{user.mail}</td><td>{user.course_id}</td><td>{day}</td></tr>\n"
-    
-    html += """ 
-        </table>
-  </body>
-</html>
-    """
-    return html
+    return render_template('table.html', users=users, get_day=get_day)
 
 
 @app.route('/delete', methods=["POST"])

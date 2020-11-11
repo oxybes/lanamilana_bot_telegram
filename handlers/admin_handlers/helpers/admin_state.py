@@ -4,6 +4,7 @@ class AdminStateMainMenu(StatesGroup):
     admin_menu = State()
     managing_courses = State()
     whos = State()
+    write_new_shedule = State()
 
 class AdminStateManagingCourses(StatesGroup):
     add_course = State()

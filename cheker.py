@@ -52,12 +52,30 @@ def kick_user_from_channel(user, channel):
         response = create_requets("POST", "kickChatMember", data = {'chat_id' : channel.id, 'user_id' : user.id})
 
     update_info_user(user)
+
+def send_message_seven(user):
+    text = "Добрый день. Ваша подписка на онлайн-курс Юланы Селивановой «Здоровая кожа» заканчивается через неделю. Успейте посмотреть все уроки, которые откладывали на потом. Когда подписка закончится ее можно будет возобновить через бота Telegram."
+    data = {
+            'chat_id' : user.chat_id,
+            'text' : text
+            }
+
+    answer = create_requets("POST", "sendMessage", data=data)
+    message_id = json.loads(answer)['result']["message_id"]
+    message = Message(user_id = user.id, message_id=message_id)
+    DataBaseFunc.add(message)
     
 all_users = DataBaseFunc.get_users_with_subscribe()
 users = [user for user in all_users if user.is_have_subscription]
 for user in users:
     for ph in [subs for subs in user.purchased_subscriptions if subs.is_check == False]:
     # for ph in [subs for subs in user.purchased_subscriptions]:
+        date = ph.data_end - datetime.now()
+        if ((date.days) == 7 and user.is_check_seven_days == False):
+            send_message_seven(user)
+            user.is_check_seven_days = True
+            DataBaseFunc.commit()
+
         if (ph.data_end > datetime.now()):
             continue
         for channel in ph.courses.channels:

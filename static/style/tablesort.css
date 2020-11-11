@@ -1,0 +1,14 @@
+th {
+	font-weight: normal;
+	border-bottom: 2px solid #6678b1;
+	border-right: 30px solid #fff;
+	border-left: 30px solid #fff;
+	color: #039;
+	padding: 8px 2px;
+  }
+  td {
+	border-right: 30px solid #fff;
+	border-left: 30px solid #fff;
+	color: #669;
+	padding: 12px 2px;
+  }

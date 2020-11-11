@@ -1,3 +1,4 @@
 {
-    "python.linting.pylintEnabled": true
+    "python.linting.pylintEnabled": true,
+    "python.pythonPath": "c:\\Users\\oxybes\\Desktop\\YandexDisk\\My Projects\\Telegram\\lanamilana_bot_telegram\\env\\Scripts\\python.exe"
 }

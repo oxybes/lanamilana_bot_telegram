@@ -7,7 +7,7 @@ from database.models import Contact, User, Message
 from misc import dp, bot
 from aiogram import types
 from aiogram.dispatcher import FSMContext
-from config import get_text, TEXTS, get_text_but
+from config import get_text, TEXTS, get_text_but, texts_shedule_filename, texts_shedule2_filename
 from handlers.user_handlers.helpers.generator_keyboards import UserGeneratorKeyboard
 from handlers.user_handlers.helpers.user_state import UserStateMainMenu, UserStateRegister
 from handlers.admin_handlers.helpers.admin_state import AdminStateMainMenu
@@ -61,7 +61,10 @@ async def shedule(callback : types.CallbackQuery):
     user = DataBaseFunc.get_user(callback.from_user)
     ketboard = InlineKeyboardMarkup()
     ketboard.add(InlineKeyboardButton("Назад", callback_data="shedule_back"))
-    await callback.message.edit_text(text=UserHelp.get_shedule(), reply_markup=ketboard)
+    with open(texts_shedule_filename, 'r', encoding='utf8') as file:
+        TEXT_SHEDULE_1 = file.read()
+
+    await callback.message.edit_text(text=TEXT_SHEDULE_1, reply_markup=ketboard)
 
 
 @dp.callback_query_handler(lambda callback : callback.data == "shedule_back", state = "*")

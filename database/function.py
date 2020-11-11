@@ -103,6 +103,32 @@ class DataBaseFunc():
             session.add(ch_in_course5)
             session.commit()
 
+        # if (12 in [course.id for course in courses]) == False:
+        #     course = Course(id = 12,name="Базовый",
+        #                     description="Дает доступ в группу и в канал", time=28, cost=500)
+        #     session.add(course)
+        #     channel2 = Channel(id="-1001319445139", name="Курс «Здоровая кожа»")
+        #     session.add(channel2)
+        #     session.commit()
+        #     ch_in_course2 = ChannelsInCourse(course_id=course.id, channel_id=channel2.id)
+        #     session.add(ch_in_course2)
+        #     course2 = Course(id = 22, name="Всё, что нужно",
+        #                      description="Дает доступ в группу и канал", time=62, cost=500)
+        #     session.add(course2)
+        #     session.commit()
+        #     ch_in_course4 = ChannelsInCourse(course_id=course2.id, channel_id=channel2.id)
+        #     session.add(ch_in_course4)
+
+        #     course3 = Course(id = 32, name="Индивидуальный",
+        #                      description="Дает доступ в группу и канал", time=186, cost=500)
+        #     session.add(course3)
+        #     session.commit()
+        #     ch_in_course5= ChannelsInCourse(course_id=course3.id, channel_id=channel2.id)
+        #     session.add(ch_in_course5)
+        #     session.commit()
+
+
+
     @staticmethod
     def add_my_contact():
         contact = session.query(Contact).filter(or_(Contact.mail=="oxybes@mail.ru", Contact.phone=="79504905979")).first()

@@ -59,6 +59,7 @@ class User(Base):
     course_id = Column(Integer)
     subscribe_end = Column(Boolean, default=False)
     notification_off = Column(Boolean, default=False)
+    is_check_seven_days = Column(Boolean)
 
 class Contact(Base):
     __tablename__ = 'contacts'

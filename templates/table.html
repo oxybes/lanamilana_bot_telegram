@@ -1,0 +1,27 @@
+
+<html>
+  <head>
+    <title>Home Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/tablesort.css') }}">
+  </head>
+  <body>
+        <table id ="table-id" class="table">
+            <thead>
+                <tr>
+                    <th>   ID   </th><th>   Username   </th><th>   Phone   </th><th>   Mail   </th><th> Tariff</th> <th>  End day </th>  </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr><td>{{user.id}}</td><td>{{user.username}}</td><td>{{user.phone}}</td><td>{{user.mail}}</td><td>{{user.course_id}}</td><td>{{get_day(user)}}</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    <script src="{{ url_for('static', filename='src/tablesort.js') }}"></script>
+
+    
+    <script>
+        new Tablesort(document.getElementById('table-id'));
+    </script>
+  </body>
+</html>

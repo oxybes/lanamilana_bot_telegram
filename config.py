@@ -2,9 +2,9 @@ import os
 import json
 
 
-TOKEN="1185185639:AAE6S_YhsM_FRs7F3xEnsZtqLDxWAbfhPso"
-MAIN_ADMIN_ID=454709994
-TOKEN_SHOP_YANDEX="390540012:LIVE:12837"
+TOKEN=os.getenv("TOKEN")
+MAIN_ADMIN_ID=os.getenv("MAIN_ADMIN_ID")
+TOKEN_SHOP_YANDEX=os.getenv("TOKEN_SHOP")
 
 if (os.name == "nt"):
     textsFilename = "texts//text.json"
